@@ -8,12 +8,15 @@ import toast from 'react-hot-toast';
 import NotFoundPage from '../NotFoundPage';
 import { ImageGenerationInput as AssetInput } from '../../components/admin/ImageGenerationInput';
 import TextGenerationInput from '../../components/admin/TextGenerationInput';
+import { generateTrackDescription } from '../../services/geminiService';
+import { SparklesIcon } from '../../components/icons';
 
 const AdminArtistEditPage: React.FC = () => {
   const { artistId } = ReactRouterDOM.useParams<{ artistId: string }>();
   const navigate = ReactRouterDOM.useNavigate();
   const { artists, updateArtist } = useContent();
   const [artist, setArtist] = useState<Artist | null>(null);
+  const [generatingDescForTrack, setGeneratingDescForTrack] = useState<string | null>(null);
 
   useEffect(() => {
     // Only set the local state if the component is loading a new artist.
@@ -154,6 +157,20 @@ const AdminArtistEditPage: React.FC = () => {
     }
   };
 
+  const handleGenerateDescription = async (releaseId: string, track: Track) => {
+    if (!artist) return;
+    setGeneratingDescForTrack(track.id);
+    try {
+        const description = await generateTrackDescription(track.title, artist);
+        handleTrackChange(releaseId, track.id, 'description', description);
+        toast.success(`Description generated for "${track.title}"!`);
+    } catch (e: any) {
+        toast.error(e.message || "Failed to generate description.");
+    } finally {
+        setGeneratingDescForTrack(null);
+    }
+}
+
   return (
     <div>
       <h1 className="text-3xl font-bold text-white mb-8">Edit Artist: <span className="text-brand-primary">{artist.name}</span></h1>
@@ -255,16 +272,39 @@ const AdminArtistEditPage: React.FC = () => {
                     <div className="border-t border-brand-primary/10 pt-4 space-y-2">
                         <h4 className="text-sm font-semibold text-brand-text-secondary">Tracks in this release:</h4>
                         {release.tracks.map((track) => (
-                            <div key={track.id} className="flex items-center gap-2">
-                                <input type="text" value={track.title} onChange={(e) => handleTrackChange(release.id, track.id, 'title', e.target.value)} placeholder="Track Title" className="flex-grow bg-brand-dark rounded-md px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary"/>
-                                <AssetInput
-                                    assetType={AssetType.AUDIO}
-                                    value={track.sourceUrl || ''}
-                                    onValueChange={(newValue) => handleTrackChange(release.id, track.id, 'sourceUrl', newValue)}
-                                    placeholder="Source URL or select from vault"
-                                    inputClassName="flex-grow bg-brand-dark rounded-md px-3 py-2 pr-20 text-white text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary"
-                                />
-                                <button type="button" onClick={() => handleDeleteTrack(release.id, track.id)} className="text-red-500 hover:text-red-400 text-xs">Delete</button>
+                            <div key={track.id} className="bg-brand-dark p-3 rounded-md space-y-2">
+                                <div className="flex items-center gap-2">
+                                    <input type="text" value={track.title} onChange={(e) => handleTrackChange(release.id, track.id, 'title', e.target.value)} placeholder="Track Title" className="flex-grow bg-brand-bg rounded-md px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary"/>
+                                    <AssetInput
+                                        assetType={AssetType.AUDIO}
+                                        value={track.sourceUrl || ''}
+                                        onValueChange={(newValue) => handleTrackChange(release.id, track.id, 'sourceUrl', newValue)}
+                                        placeholder="Source URL or select from vault"
+                                        inputClassName="flex-grow bg-brand-bg rounded-md px-3 py-2 pr-20 text-white text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary"
+                                    />
+                                    <button type="button" onClick={() => handleDeleteTrack(release.id, track.id)} className="text-red-500 hover:text-red-400 text-xs">Delete</button>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <textarea
+                                        value={track.description || ''}
+                                        onChange={(e) => handleTrackChange(release.id, track.id, 'description', e.target.value)}
+                                        placeholder="Track description..."
+                                        className="flex-grow bg-brand-bg rounded-md px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary"
+                                        rows={2}
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => handleGenerateDescription(release.id, track)}
+                                        disabled={generatingDescForTrack === track.id}
+                                        className="p-2 rounded-full bg-brand-primary/20 text-brand-primary hover:bg-brand-primary hover:text-white transition-colors disabled:opacity-50"
+                                        title="Generate Description"
+                                    >
+                                        {generatingDescForTrack === track.id
+                                            ? <div className="w-5 h-5 border-2 border-t-transparent border-white rounded-full animate-spin"></div>
+                                            : <SparklesIcon className="w-5 h-5"/>
+                                        }
+                                    </button>
+                                </div>
                             </div>
                         ))}
                         <button type="button" onClick={() => handleAddTrack(release.id)} className="text-sm text-brand-primary hover:text-white mt-2">+ Add Track</button>

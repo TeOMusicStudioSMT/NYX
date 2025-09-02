@@ -665,8 +665,10 @@ export const STATIC_PAGE_CONTENT: Record<PageID, string> = {
 `,
 };
 
+// FIX: Export missing constant
 export const STUDIO_SUBMISSIONS: StudioSubmission[] = [];
 
+// FIX: Export missing constant
 export const CONSTELLATION_ITEMS: ConstellationItem[] = [
     { 
         id: 'c1', 
@@ -698,6 +700,7 @@ export const CONSTELLATION_ITEMS: ConstellationItem[] = [
     }
 ];
 
+// FIX: Export missing constant
 export const TOTT_CATALOG_TRACKS: DisplayTrack[] = [
     { id: 'tott-1', title: 'Quantum Echo', artist: 'S.M.T. Collective', type: 'Single', imageUrl: 'https://picsum.photos/seed/tott1/400/400', sourceUrl: 'https://storage.googleapis.com/gte-hosted-generic-web-server/GTE-Demo-Sound/Techno_Beat.mp3', isPremium: true },
     { id: 'tott-2', title: 'Cryo-Sleep Lullaby', artist: 'NYX', type: 'Single', imageUrl: 'https://picsum.photos/seed/tott2/400/400', sourceUrl: 'https://storage.googleapis.com/gte-hosted-generic-web-server/GTE-Demo-Sound/AMBIENT_SYNTH_01.mp3', isPremium: true },
@@ -705,6 +708,7 @@ export const TOTT_CATALOG_TRACKS: DisplayTrack[] = [
     { id: 'tott-4', title: 'Ghost in the Folk', artist: 'Kael', type: 'Single', imageUrl: 'https://picsum.photos/seed/tott4/400/400', sourceUrl: 'https://storage.googleapis.com/gte-hosted-generic-web-server/GTE-Demo-Sound/AMBIENT_SYNTH_03.mp3', isPremium: true },
 ];
 
+// FIX: Export missing constant
 export const PLAYLISTS: Playlist[] = [
     {
         id: 'pl_flow_1',
@@ -830,11 +834,13 @@ export const PLAYLISTS: Playlist[] = [
     },
 ];
 
+// FIX: Export missing constant
 export const ASSET_VAULT: Asset[] = [
     { id: 'asset1', name: 'Default Cover', type: AssetType.IMAGE, url: 'https://picsum.photos/seed/default/200/200' },
     { id: 'asset2', name: 'NYX Album 1 Cover', type: AssetType.IMAGE, url: 'https://cdn2.suno.ai/abfe83b8.jpeg' },
 ];
 
+// FIX: Export missing constant
 export const SUBSCRIPTION_TIERS_DATA: SubscriptionTierInfo[] = [
     {
         tier: SubscriptionTier.FREE,
@@ -879,6 +885,7 @@ export const SUBSCRIPTION_TIERS_DATA: SubscriptionTierInfo[] = [
     },
 ];
 
+// FIX: Export missing constant
 export const TEO_APPS: TeoApp[] = [
   {
     id: 'teo-app-1',
@@ -911,9 +918,12 @@ export const TEO_APPS: TeoApp[] = [
 ];
 
 // Point costs for generation
+// FIX: Export missing constant
 export const IMAGE_GENERATION_COST = 5;
+// FIX: Export missing constant
 export const CHAT_MESSAGE_COST = 1;
 
+// FIX: Export missing constant
 export const DEFAULT_STUDIO_COSTS: StudioActionCosts = {
   ideaAndLyrics: 10,
   soundPalette: 5,
@@ -921,6 +931,7 @@ export const DEFAULT_STUDIO_COSTS: StudioActionCosts = {
   fullProject: 40,
 };
 
+// FIX: Export missing constant
 export const DEFAULT_API_KEYS: ApiKeys = {
     stability: '',
     gemini: '',
@@ -928,6 +939,7 @@ export const DEFAULT_API_KEYS: ApiKeys = {
 };
 
 // Daily point allowance per tier
+// FIX: Export missing constant
 export const DAILY_POINT_ALLOWANCE: Record<SubscriptionTier, number> = {
     [SubscriptionTier.FREE]: 5,
     [SubscriptionTier.BASIC]: 20,
@@ -936,6 +948,7 @@ export const DAILY_POINT_ALLOWANCE: Record<SubscriptionTier, number> = {
 };
 
 // S.M.T. Sound Catalog
+// FIX: Export missing constant
 export const SOUND_CATALOG: SoundStem[] = [
     // Drums
     { id: 'drum_retro_808', name: 'Retro 808 Kit', category: SoundStemCategory.DRUMS, url: 'https://storage.googleapis.com/tev-public-assets/drums-1.mp3' },
@@ -964,6 +977,39 @@ export const SOUND_CATALOG: SoundStem[] = [
     { id: 'fx_riser_epic', name: 'Epic Riser', category: SoundStemCategory.FX, url: 'https://storage.googleapis.com/tev-public-assets/fx-3.mp3' },
 ];
 
+// FIX: Export missing constant
+export const VISUALIZER_THEMES: Record<string, string[]> = {
+  'Cosmic Drift': [
+    'https://picsum.photos/seed/cosmic1/1920/1080',
+    'https://picsum.photos/seed/cosmic2/1920/1080',
+    'https://picsum.photos/seed/cosmic3/1920/1080',
+    'https://picsum.photos/seed/cosmic4/1920/1080',
+    'https://picsum.photos/seed/cosmic5/1920/1080',
+  ],
+  'Cyberpunk City': [
+    'https://picsum.photos/seed/cyber1/1920/1080',
+    'https://picsum.photos/seed/cyber2/1920/1080',
+    'https://picsum.photos/seed/cyber3/1920/1080',
+    'https://picsum.photos/seed/cyber4/1920/1080',
+    'https://picsum.photos/seed/cyber5/1920/1080',
+  ],
+  'Ethereal Nature': [
+    'https://picsum.photos/seed/nature1/1920/1080',
+    'https://picsum.photos/seed/nature2/1920/1080',
+    'https://picsum.photos/seed/nature3/1920/1080',
+    'https://picsum.photos/seed/nature4/1920/1080',
+    'https://picsum.photos/seed/nature5/1920/1080',
+  ],
+  'Abstract Glitch': [
+    'https://picsum.photos/seed/glitch1/1920/1080',
+    'https://picsum.photos/seed/glitch2/1920/1080',
+    'https://picsum.photos/seed/glitch3/1920/1080',
+    'https://picsum.photos/seed/glitch4/1920/1080',
+    'https://picsum.photos/seed/glitch5/1920/1080',
+  ],
+};
+
+// FIX: Export missing constant
 export const DEFAULT_FOOTER_CONTENT: FooterContent = {
   description: "TeO-CONGLOMERATE of all Life in creation. Pioneering the future of music through AI artistry and human creativity.",
   artisticProjectNote: "Please note: This is an artistic project currently in development.",
@@ -1001,36 +1047,4 @@ export const DEFAULT_FOOTER_CONTENT: FooterContent = {
   },
   copyrightText: "TeO Music Studio (S.M.T.). All rights reserved.",
   poweredByText: "Made with for music lovers",
-};
-
-// FIX: Added missing VISUALIZER_THEMES export.
-export const VISUALIZER_THEMES: Record<string, string[]> = {
-  'Cosmic Drift': [
-    'https://picsum.photos/seed/cosmic1/1920/1080',
-    'https://picsum.photos/seed/cosmic2/1920/1080',
-    'https://picsum.photos/seed/cosmic3/1920/1080',
-    'https://picsum.photos/seed/cosmic4/1920/1080',
-    'https://picsum.photos/seed/cosmic5/1920/1080',
-  ],
-  'Cyberpunk City': [
-    'https://picsum.photos/seed/cyber1/1920/1080',
-    'https://picsum.photos/seed/cyber2/1920/1080',
-    'https://picsum.photos/seed/cyber3/1920/1080',
-    'https://picsum.photos/seed/cyber4/1920/1080',
-    'https://picsum.photos/seed/cyber5/1920/1080',
-  ],
-  'Ethereal Nature': [
-    'https://picsum.photos/seed/nature1/1920/1080',
-    'https://picsum.photos/seed/nature2/1920/1080',
-    'https://picsum.photos/seed/nature3/1920/1080',
-    'https://picsum.photos/seed/nature4/1920/1080',
-    'https://picsum.photos/seed/nature5/1920/1080',
-  ],
-  'Abstract Glitch': [
-    'https://picsum.photos/seed/glitch1/1920/1080',
-    'https://picsum.photos/seed/glitch2/1920/1080',
-    'https://picsum.photos/seed/glitch3/1920/1080',
-    'https://picsum.photos/seed/glitch4/1920/1080',
-    'https://picsum.photos/seed/glitch5/1920/1080',
-  ],
 };

@@ -1,9 +1,10 @@
-import React, { useRef, useEffect, useState, useCallback } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { useContent } from '../hooks/useContent';
 import { PlayFilledIcon, PauseFilledIcon, ChevronLeftIcon, ChevronRightIcon, XIcon, ChevronUpIcon, ChevronDownIcon, LayersIcon, Volume1Icon, Volume2Icon, VolumeXIcon } from './icons';
 import toast from 'react-hot-toast';
 import { VISUALIZER_THEMES } from '../constants';
 import Visualizer from './Visualizer';
+import ColorThief from 'colorthief';
 
 const formatTime = (seconds: number) => {
     if (isNaN(seconds) || !isFinite(seconds)) return '0:00';
@@ -33,7 +34,6 @@ const AudioPlayer: React.FC = () => {
     const gainNodeRef = useRef<GainNode | null>(null);
     const filterNodeRef = useRef<BiquadFilterNode | null>(null);
     const analyserNodeRef = useRef<AnalyserNode | null>(null);
-    const animationFrameRef = useRef<number>();
 
     const [isPlaying, setIsPlaying] = useState(false);
     const [duration, setDuration] = useState(0);
@@ -42,13 +42,36 @@ const AudioPlayer: React.FC = () => {
     const [activeTheme, setActiveTheme] = useState(Object.keys(VISUALIZER_THEMES)[0]);
     const [isThemePickerOpen, setIsThemePickerOpen] = useState(false);
     const themePickerRef = useRef<HTMLDivElement>(null);
-    const [playerStyle, setPlayerStyle] = useState({});
+    const [scrollOpacity, setScrollOpacity] = useState(1);
+    const [scrollTransform, setScrollTransform] = useState(0);
+    const [scrollBoxShadow, setScrollBoxShadow] = useState('none');
     
     const [volume, setVolume] = useState<number>(() => {
         const savedVolume = localStorage.getItem('smt-player-volume');
         return savedVolume !== null ? parseFloat(savedVolume) : 1;
     });
     const [volumeBeforeMute, setVolumeBeforeMute] = useState(1);
+    const [dominantColor, setDominantColor] = useState<string>('#000000');
+
+    useEffect(() => {
+        const updateDominantColor = async () => {
+            if (currentTrack?.coverImageUrl) {
+                const img = new Image();
+                img.crossOrigin = 'Anonymous';
+                img.src = currentTrack.coverImageUrl;
+                img.onload = () => {
+                    const colorThief = new ColorThief();
+                    const color = colorThief.getColor(img);
+                    const hexColor = `#${color[0].toString(16).padStart(2, '0')}${color[1].toString(16).padStart(2, '0')}${color[2].toString(16).padStart(2, '0')}`;
+                    setDominantColor(hexColor);
+                };
+                img.onerror = () => {
+                    setDominantColor('#111827'); // Default fallback
+                };
+            }
+        };
+        updateDominantColor();
+    }, [currentTrack]);
 
     useEffect(() => {
         localStorage.setItem('smt-player-volume', volume.toString());
@@ -59,7 +82,7 @@ const AudioPlayer: React.FC = () => {
         }
     }, [volume]);
 
-     useEffect(() => {
+    useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (themePickerRef.current && !themePickerRef.current.contains(event.target as Node)) {
                 setIsThemePickerOpen(false);
@@ -69,10 +92,7 @@ const AudioPlayer: React.FC = () => {
         
         if (!audioContextRef.current) {
             try {
-                // FIX: The AudioContext constructor was being called without arguments.
-                // This can cause a type error in some environments. Passing an empty
-                // object satisfies the constructor's requirements.
-                const context = new (window.AudioContext || (window as any).webkitAudioContext)({});
+                const context = new (window.AudioContext || (window as any).webkitAudioContext)();
                 audioContextRef.current = context;
                 gainNodeRef.current = context.createGain();
                 filterNodeRef.current = context.createBiquadFilter();
@@ -91,51 +111,38 @@ const AudioPlayer: React.FC = () => {
         }
         
         const handleScroll = () => {
-            if (animationFrameRef.current) {
-                cancelAnimationFrame(animationFrameRef.current);
+            const scrollY = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollPercent = docHeight > 0 ? Math.min(scrollY / docHeight, 1) : 0;
+
+            const newGain = 1.0 - (scrollPercent * 0.3); // Volume down to 70%
+            const newFreq = 22050 - (scrollPercent * 20000); // Freq down to 2050hz
+
+            const gain = gainNodeRef.current;
+            const filter = filterNodeRef.current;
+            const context = audioContextRef.current;
+            if (gain && filter && context) {
+                gain.gain.setTargetAtTime(newGain, context.currentTime, 0.1);
+                filter.frequency.setTargetAtTime(newFreq, context.currentTime, 0.1);
             }
-            animationFrameRef.current = requestAnimationFrame(() => {
-                const scrollY = window.scrollY;
-                const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-                const scrollPercent = docHeight > 0 ? Math.min(scrollY / docHeight, 1) : 0;
+            
+            const floatAmount = Math.sin(scrollPercent * Math.PI) * 60; // Parabolic curve for float, max 60px
+            const newOpacity = 1 - (Math.sin(scrollPercent * Math.PI) * 0.1); // Slightly transparent at peak
+            const shadowOpacity = 0.2 + (Math.sin(scrollPercent * Math.PI) * 0.2);
+            const shadowBlur = 15 + (Math.sin(scrollPercent * Math.PI) * 20);
 
-                // --- Audio Effects ---
-                const gain = gainNodeRef.current;
-                const filter = filterNodeRef.current;
-                const context = audioContextRef.current;
-                if (gain && filter && context) {
-                    const newGain = 1.0 - (scrollPercent * 0.3); // Volume down to 70%
-                    gain.gain.setTargetAtTime(newGain, context.currentTime, 0.1);
-
-                    const newFreq = 22050 - (scrollPercent * 20000); // Freq down to 2050hz
-                    filter.frequency.setTargetAtTime(newFreq, context.currentTime, 0.1);
-                }
-                
-                // --- Visual Effects ---
-                const floatAmount = Math.sin(scrollPercent * Math.PI) * 60; // Parabolic curve for float, max 60px
-                const newOpacity = 1 - (Math.sin(scrollPercent * Math.PI) * 0.1); // Slightly transparent at peak
-                const shadowOpacity = 0.2 + (Math.sin(scrollPercent * Math.PI) * 0.2);
-                const shadowBlur = 15 + (Math.sin(scrollPercent * Math.PI) * 20);
-
-                setPlayerStyle({
-                    transform: `translateY(-${floatAmount}px)`,
-                    opacity: newOpacity,
-                    boxShadow: `0px -${floatAmount/3}px ${shadowBlur}px rgba(0, 0, 0, ${shadowOpacity})`,
-                    transition: 'transform 150ms ease-out, opacity 150ms ease-out, box-shadow 150ms ease-out'
-                });
-            });
+            setScrollOpacity(newOpacity);
+            setScrollTransform(-floatAmount);
+            setScrollBoxShadow(`0px -${floatAmount/3}px ${shadowBlur}px rgba(0, 0, 0, ${shadowOpacity})`);
         };
 
         window.addEventListener('scroll', handleScroll, { passive: true });
 
         return () => {
-             document.removeEventListener("mousedown", handleClickOutside);
-             window.removeEventListener('scroll', handleScroll);
-             if (animationFrameRef.current) {
-                cancelAnimationFrame(animationFrameRef.current);
-            }
+            document.removeEventListener("mousedown", handleClickOutside);
+            window.removeEventListener('scroll', handleScroll);
         };
-    }, []);
+    }, [volume]);
 
     useEffect(() => {
         const audio = audioRef.current;
@@ -147,7 +154,6 @@ const AudioPlayer: React.FC = () => {
                     sourceNodeRef.current = audioContextRef.current.createMediaElementSource(audio);
                     sourceNodeRef.current.connect(gainNodeRef.current);
                 } catch (e) {
-                    // This error can happen during development with hot-reloading. It's safe to ignore.
                     if (e instanceof DOMException && e.name === 'InvalidStateError') {
                         console.warn("Web Audio API source node already exists for this element.");
                     } else {
@@ -303,7 +309,7 @@ const AudioPlayer: React.FC = () => {
                     themeImages={VISUALIZER_THEMES[activeTheme]} 
                     analyserNode={analyserNodeRef.current} 
                 />
-                <div className="absolute inset-0 bg-black/50 backdrop-blur-md flex flex-col p-8">
+                <div className="absolute inset-0 bg-black/50 backdrop-blur-md flex flex-col p-8" style={{ background: `linear-gradient(to bottom, ${dominantColor}33, transparent)` }}>
                     {/* Header */}
                     <div className="flex justify-between items-center">
                         <button onClick={() => setIsExpanded(false)} className="p-2 hover:bg-white/10 rounded-full" aria-label="Collapse player"><ChevronDownIcon className="w-6 h-6"/></button>
@@ -326,6 +332,9 @@ const AudioPlayer: React.FC = () => {
                         <img src={currentTrack.coverImageUrl} alt={currentTrack.releaseTitle} className="w-64 h-64 md:w-80 md:h-80 rounded-lg object-cover shadow-2xl shadow-black/50 mb-8" />
                         <h2 className="text-3xl md:text-5xl font-bold">{currentTrack.title}</h2>
                         <p className="text-lg md:text-xl text-brand-text-secondary mt-2">{currentTrack.artistName}</p>
+                        {currentTrack.description && (
+                            <p className="text-sm text-brand-text-secondary mt-4 max-w-xl">{currentTrack.description}</p>
+                        )}
                     </div>
                     {/* Footer Controls */}
                     <div className="w-full max-w-2xl mx-auto">
@@ -334,7 +343,7 @@ const AudioPlayer: React.FC = () => {
                             <div className="relative w-full h-3 flex items-center group">
                                 <div className="absolute w-full h-1 bg-white/20 rounded-full top-1/2 -translate-y-1/2">
                                     <div 
-                                        className="h-full bg-white rounded-full"
+                                        className="h-full bg-white rounded-full transition-all duration-300 ease-out"
                                         style={{ width: `${duration > 0 ? (currentTime / duration) * 100 : 0}%` }}
                                     ></div>
                                 </div>
@@ -371,7 +380,15 @@ const AudioPlayer: React.FC = () => {
 
     return (
         <>
-            <div style={playerStyle} className="fixed bottom-0 left-0 right-0 z-50 bg-brand-bg/90 backdrop-blur-sm border-t border-brand-primary/20 p-4">
+            <div 
+                style={{
+                    opacity: scrollOpacity,
+                    transform: `translateY(${scrollTransform}px)`,
+                    boxShadow: scrollBoxShadow,
+                    transition: 'transform 150ms ease-out, opacity 150ms ease-out, box-shadow 150ms ease-out'
+                }} 
+                className="fixed bottom-0 left-0 right-0 z-50 bg-brand-bg/90 backdrop-blur-sm border-t border-brand-primary/20 p-4"
+            >
                 <audio ref={audioRef} crossOrigin="anonymous"/>
                 <div className="container mx-auto flex items-center justify-between gap-4">
                     {/* Track Info & Expand */}
@@ -417,7 +434,7 @@ const AudioPlayer: React.FC = () => {
 
                     {/* Volume & Close */}
                     <div className="w-1/3 flex justify-end items-center gap-2">
-                         <button onClick={toggleMute} className="text-brand-text-secondary hover:text-white transition-colors" aria-label="Toggle mute">
+                        <button onClick={toggleMute} className="text-brand-text-secondary hover:text-white transition-colors" aria-label="Toggle mute">
                             <VolumeIcon />
                         </button>
                         <input type="range" min="0" max="1" step="0.01" value={volume} onChange={handleVolumeChange} className="w-24 h-1 bg-brand-surface rounded-lg appearance-none cursor-pointer range-thumb" aria-label="Volume control" />
@@ -430,17 +447,17 @@ const AudioPlayer: React.FC = () => {
                 .range-thumb { -webkit-appearance: none; appearance: none; background: transparent; }
                 .range-thumb::-webkit-slider-runnable-track { background-color: #242038; height: 0.25rem; border-radius: 0.5rem; }
                 .range-thumb::-moz-range-track { background-color: #242038; height: 0.25rem; border-radius: 0.5rem; }
-                .range-thumb::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 14px; height: 14px; background: #F0F0F0; cursor: pointer; border-radius: 50%; margin-top: -5px; }
-                .range-thumb::-moz-range-thumb { width: 14px; height: 14px; background: #F0F0F0; cursor: pointer; border-radius: 50%; border: none; }
-                .range-thumb:hover::-webkit-slider-thumb { background: #8A42DB; }
-                .range-thumb:hover::-moz-range-thumb { background: #8A42DB; }
+                .range-thumb::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 14px; height: 14px; background: #F0F0F0; cursor: pointer; border-radius: 50%; margin-top: -5px; box-shadow: 0 0 5px rgba(240, 240, 240, 0.5); }
+                .range-thumb::-moz-range-thumb { width: 14px; height: 14px; background: #F0F0F0; cursor: pointer; border-radius: 50%; border: none; box-shadow: 0 0 5px rgba(240, 240, 240, 0.5); }
+                .range-thumb:hover::-webkit-slider-thumb { background: #8A42DB; box-shadow: 0 0 8px rgba(138, 66, 219, 0.7); }
+                .range-thumb:hover::-moz-range-thumb { background: #8A42DB; box-shadow: 0 0 8px rgba(138, 66, 219, 0.7); }
 
                 /* Styles for Expanded Player Volume Slider */
                 .range-thumb-light { -webkit-appearance: none; background-color: transparent; }
                 .range-thumb-light::-webkit-slider-runnable-track { background-color: rgba(255,255,255,0.2); height: 0.25rem; border-radius: 0.5rem; }
                 .range-thumb-light::-moz-range-track { background-color: rgba(255,255,255,0.2); height: 0.25rem; border-radius: 0.5rem; }
-                .range-thumb-light::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 14px; height: 14px; background: #FFFFFF; cursor: pointer; border-radius: 50%; margin-top: -5px; }
-                .range-thumb-light::-moz-range-thumb { width: 14px; height: 14px; background: #FFFFFF; cursor: pointer; border-radius: 50%; border: none; }
+                .range-thumb-light::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 14px; height: 14px; background: #FFFFFF; cursor: pointer; border-radius: 50%; margin-top: -5px; box-shadow: 0 0 5px rgba(255, 255, 255, 0.5); }
+                .range-thumb-light::-moz-range-thumb { width: 14px; height: 14px; background: #FFFFFF; cursor: pointer; border-radius: 50%; border: none; box-shadow: 0 0 5px rgba(255, 255, 255, 0.5); }
                 
                 /* Styles for new Progress Bar slider */
                 .progress-slider { -webkit-appearance: none; appearance: none; background: transparent; cursor: pointer; }
@@ -448,8 +465,8 @@ const AudioPlayer: React.FC = () => {
                 .progress-slider::-moz-range-thumb { width: 1rem; height: 1rem; border-radius: 50%; background: #F0F0F0; border: none; opacity: 0; transition: opacity 0.2s, transform 0.2s; transform: scale(0.8); }
                 .progress-slider.light::-webkit-slider-thumb { background: #FFFFFF; }
                 .progress-slider.light::-moz-range-thumb { background: #FFFFFF; }
-                .group:hover .progress-slider::-webkit-slider-thumb { opacity: 1; transform: scale(1); }
-                .group:hover .progress-slider::-moz-range-thumb { opacity: 1; transform: scale(1); }
+                .group:hover .progress-slider::-webkit-slider-thumb { opacity: 1; transform: scale(1); box-shadow: 0 0 10px rgba(138, 66, 219, 0.7); }
+                .group:hover .progress-slider::-moz-range-thumb { opacity: 1; transform: scale(1); box-shadow: 0 0 10px rgba(138, 66, 219, 0.7); }
             `}</style>
         </>
     );

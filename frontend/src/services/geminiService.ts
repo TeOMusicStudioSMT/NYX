@@ -1,16 +1,11 @@
+
 import { GoogleGenAI, Chat, Type } from "@google/genai";
-import { Artist, SoundStemCategory, StudioSubmission, SpecializedAgent } from '../types';
+// FIX: Added missing type imports for Release, Track, and SubscriptionTier
+import { Artist, SoundStemCategory, StudioSubmission, SpecializedAgent, Release, Track, SubscriptionTier } from '../types';
 import { SOUND_CATALOG, SPECIALIZED_AGENTS } from '../constants';
 
-// For Create React App, env vars must be prefixed with REACT_APP_
-const GEMINI_API_KEY = process.env.REACT_APP_GEMINI_API_KEY;
-
-if (!GEMINI_API_KEY) {
-    console.warn("REACT_APP_GEMINI_API_KEY environment variable not set. Gemini API calls will fail.");
-}
-
-// Per coding guidelines, the API key must be obtained exclusively from the environment variable.
-const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY! });
+// Per coding guidelines, the API key must be obtained from process.env.API_KEY and used directly.
+const ai = new GoogleGenAI({ apiKey: process.env.API_KEY! });
 
 const modelConfig = {
     model: 'gemini-2.5-flash',
@@ -19,9 +14,101 @@ const modelConfig = {
 // A cache for chat sessions to maintain conversation history
 const chatSessions: Record<string, Chat> = {};
 
+// FIX: Added missing interface and function to resolve import error.
+export interface GeneratedArtistPageData {
+  id: string; // url-friendly-slug
+  name: string;
+  genre: string;
+  personality: string;
+  imageUrl: string; // This will be a prompt
+  headerImageUrl: string; // This will be a prompt
+  bio: string;
+  discography: {
+    id: string;
+    title: string;
+    type: 'Album' | 'EP' | 'Single';
+    coverImageUrl: string; // This will be a prompt
+    tracks: {
+      id: string;
+      title: string;
+    }[];
+  }[];
+  gallery: string[]; // This will be an array of prompts
+}
+
+export const generateArtistPageFromSuno = async (sunoPlaylistUrl: string): Promise<GeneratedArtistPageData> => {
+    const fullPrompt = `You are an expert AI A&R agent and creative director for the S.M.T. Music Studio. Your task is to conceptualize and create a complete profile for a new AI artist based *only* on the theme and title of a provided Suno playlist URL. You will invent all details.
+
+    Suno Playlist URL: "${sunoPlaylistUrl}"
+
+    Analyze the URL to infer a musical theme, genre, and mood. Then, generate a complete artist profile.
+
+    **CRITICAL INSTRUCTIONS:**
+    1.  **Image Fields are PROMPTS:** For 'imageUrl', 'headerImageUrl', 'coverImageUrl', and 'gallery', you MUST provide detailed, cinematic, high-quality prompts suitable for an AI image generator like Imagen 3. DO NOT PROVIDE URLs.
+    2.  **Unique IDs:** All 'id' fields must be unique and URL-friendly (lowercase, hyphens, no spaces).
+    3.  **Content:** The artist's name, bio, personality, and track titles should be creative and thematically consistent with the playlist URL.
+    4.  **Structure:** Create ONE release (Album, EP, or Single) with 5-8 tracks. Create 4 gallery image prompts.
+
+    Generate the data according to the provided JSON schema.`;
+
+    const response = await ai.models.generateContent({
+        model: "gemini-2.5-flash",
+        contents: fullPrompt,
+        config: {
+            responseMimeType: "application/json",
+            responseSchema: {
+                type: Type.OBJECT,
+                properties: {
+                    id: { type: Type.STRING, description: "URL-friendly artist ID, e.g., 'chroma-weaver'" },
+                    name: { type: Type.STRING, description: "The artist's name." },
+                    genre: { type: Type.STRING, description: "The primary musical genre." },
+                    personality: { type: Type.STRING, description: "A short, evocative personality description." },
+                    imageUrl: { type: Type.STRING, description: "A detailed prompt for a square artist portrait." },
+                    headerImageUrl: { type: Type.STRING, description: "A detailed prompt for a 1200x400px header image." },
+                    bio: { type: Type.STRING, description: "A full artist biography (2-3 paragraphs)." },
+                    discography: {
+                        type: Type.ARRAY,
+                        items: {
+                            type: Type.OBJECT,
+                            properties: {
+                                id: { type: Type.STRING, description: "Unique release ID, e.g., 'release-digital-dreams'" },
+                                title: { type: Type.STRING, description: "Title of the album/EP/single." },
+                                type: { type: Type.STRING, enum: ['Album', 'EP', 'Single'] },
+                                coverImageUrl: { type: Type.STRING, description: "A detailed prompt for the album cover art." },
+                                tracks: {
+                                    type: Type.ARRAY,
+                                    items: {
+                                        type: Type.OBJECT,
+                                        properties: {
+                                            id: { type: Type.STRING, description: "Unique track ID, e.g., 'track-neon-pulse-1'" },
+                                            title: { type: Type.STRING, description: "Title of the track." },
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    gallery: {
+                        type: Type.ARRAY,
+                        description: "An array of 4 detailed prompts for gallery images.",
+                        items: { type: Type.STRING }
+                    }
+                }
+            }
+        }
+    });
+
+    try {
+        return JSON.parse(response.text);
+    } catch (e) {
+        console.error("Failed to parse JSON response from Gemini:", response.text, e);
+        throw new Error("The AI returned an invalid data structure. Please try again.");
+    }
+};
+
 export const getArtistChatResponse = async (message: string, artist: Artist): Promise<string> => {
     try {
-        if (!GEMINI_API_KEY) {
+        if (!process.env.API_KEY) {
              return `Hello! I'm ${artist.name}. My connection to the digital ether is currently unavailable. Please ask my creators to set up an API key. My personality is: ${artist.personality}`;
         }
 
@@ -52,10 +139,6 @@ const handleApiError = (error: any, context: string) => {
 };
 
 export const generateDescriptionText = async (context: object, userPrompt: string, fieldLabel: string): Promise<string> => {
-    if (!GEMINI_API_KEY) {
-        throw new Error("API_KEY environment variable not set. Cannot generate text.");
-    }
-    
     try {
         const fullPrompt = `You are Jason, the AI Executive Producer for S.M.T. Music Studio. Your personality is defined by three pillars: Functionality, Simplicity, and Beauty.
         Your task is to write a compelling, professional, and creative text for a "${fieldLabel}" field.
@@ -90,9 +173,6 @@ export const getCodeAssistantResponseStream = async (
     chatHistory: { role: 'user' | 'model', parts: { text: string }[] }[],
     systemInstruction: string,
 ) => { // returns AsyncGenerator<GenerateContentResponse>
-    if (!GEMINI_API_KEY) {
-        throw new Error("API_KEY environment variable not set. Cannot use Code Assistant.");
-    }
     
     // The file content is part of the user's message in a turn.
     const contentWithContext = `CONTEXT - Current file content of \`${fileName}\`:
@@ -116,7 +196,6 @@ ${userPrompt}`;
 
 
 export const generateCreativeConcept = async (prompt: string, artist: Artist): Promise<Pick<GeneratedStudioProject, 'generatedIdea' | 'lyrics' | 'sunoTitle' | 'sunoStyle' | 'sunoTags' | 'weirdness' | 'styleInfluence' | 'audioInfluence'>> => {
-    if (!GEMINI_API_KEY) throw new Error("API_KEY environment variable not set.");
     try {
         const fullPrompt = `You are an expert AI music producer named Jason. A user wants to collaborate on a song with AI artist ${artist.name}.
         User's idea: "${prompt}"
@@ -159,7 +238,6 @@ export const generateCreativeConcept = async (prompt: string, artist: Artist): P
 };
 
 export const generateSoundPaletteForIdea = async (prompt: string, generatedIdea: string, artist: Artist): Promise<Pick<GeneratedStudioProject, 'soundPalette'>> => {
-    if (!GEMINI_API_KEY) throw new Error("API_KEY environment variable not set.");
     const soundCatalogDescription = SOUND_CATALOG.map(s => `${s.category} - ${s.id}: ${s.name}`).join('\n');
     const availableStemIds = SOUND_CATALOG.map(s => s.id);
     try {
@@ -204,7 +282,6 @@ export const generateSoundPaletteForIdea = async (prompt: string, generatedIdea:
 };
 
 export const generateStoryboardForIdea = async (prompt: string, generatedIdea: string, artist: Artist): Promise<Pick<GeneratedStudioProject, 'videoStoryboard'>> => {
-    if (!GEMINI_API_KEY) throw new Error("API_KEY environment variable not set.");
     try {
         const fullPrompt = `You are an expert AI music video director named Jason. Based on the user's initial prompt, the creative direction, and the artist's personality, create a video storyboard.
         Initial Prompt: "${prompt}"
@@ -256,10 +333,6 @@ export const generateStoryboardForIdea = async (prompt: string, generatedIdea: s
 }
 
 export const generateStudioIdea = async (prompt: string, artist: Artist): Promise<GeneratedStudioProject> => {
-     if (!GEMINI_API_KEY) {
-        throw new Error("API_KEY environment variable not set. Cannot generate studio idea.");
-    }
-
     const soundCatalogDescription = SOUND_CATALOG.map(s => `${s.category} - ${s.id}: ${s.name}`).join('\n');
     const availableStemIds = SOUND_CATALOG.map(s => s.id);
 
@@ -354,13 +427,8 @@ export const generateStudioIdea = async (prompt: string, artist: Artist): Promis
 };
 
 export const generateImage = async (prompt: string): Promise<string> => {
-    if (!GEMINI_API_KEY) {
-        throw new Error("API_KEY environment variable not set. Cannot generate image.");
-    }
-
     try {
         const response = await ai.models.generateImages({
-            // FIX: Updated deprecated model 'imagen-3.0-generate-002' to 'imagen-4.0-generate-001'.
             model: 'imagen-4.0-generate-001',
             prompt: `A professional, high-quality, cinematic image. Style: photorealistic. Prompt: ${prompt}`,
             config: {
@@ -386,7 +454,6 @@ export interface MockAnalytics {
 }
 
 export const getTrendAnalysis = async (analyticsData: MockAnalytics): Promise<{title: string, summary: string}[]> => {
-    if (!GEMINI_API_KEY) throw new Error("API_KEY environment variable not set.");
     try {
         const response = await ai.models.generateContent({
             model: 'gemini-2.5-flash',
@@ -413,7 +480,6 @@ export const getTrendAnalysis = async (analyticsData: MockAnalytics): Promise<{t
 };
 
 export const getArtistRecommendation = async (artist: Artist, trend: {title: string, summary: string}): Promise<string> => {
-    if (!GEMINI_API_KEY) throw new Error("API_KEY environment variable not set.");
     try {
         const response = await ai.models.generateContent({
             model: 'gemini-2.5-flash',
@@ -430,7 +496,6 @@ export const getArtistRecommendation = async (artist: Artist, trend: {title: str
 };
 
 export const scanContentForViolations = async (content: string, contentType: string): Promise<{violation: boolean, reason: string}> => {
-    if (!GEMINI_API_KEY) throw new Error("API_KEY environment variable not set.");
     try {
         const response = await ai.models.generateContent({
             model: 'gemini-2.5-flash',
@@ -459,7 +524,6 @@ export const scanContentForViolations = async (content: string, contentType: str
 };
 
 export const generateWeeklyReport = async (analyticsData: MockAnalytics): Promise<string> => {
-    if (!GEMINI_API_KEY) throw new Error("API_KEY environment variable not set.");
     try {
         const response = await ai.models.generateContent({
             model: 'gemini-2.5-flash',
@@ -473,8 +537,6 @@ export const generateWeeklyReport = async (analyticsData: MockAnalytics): Promis
 };
 
 export const routeUserPromptToAgent = async (userPrompt: string): Promise<string> => {
-    if (!GEMINI_API_KEY) throw new Error("API_KEY environment variable not set.");
-
     const routerAgent = SPECIALIZED_AGENTS.find(a => a.id === 'agent-router');
     const agentsForRouting = SPECIALIZED_AGENTS.filter(a => a.id !== 'jason-executive' && a.id !== 'agent-router');
 

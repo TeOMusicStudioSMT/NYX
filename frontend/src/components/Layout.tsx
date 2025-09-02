@@ -9,7 +9,7 @@ const Layout: React.FC = () => {
   const { currentTrack } = useContent();
 
   return (
-    <div className={`bg-liquid-abstract bg-[length:400%_400%] animate-liquid-gradient min-h-screen flex flex-col text-brand-text animate-site-thump ${currentTrack ? 'pb-28' : ''}`}>
+    <div className={`bg-liquid-abstract bg-[length:400%_400%] animate-liquid-gradient min-h-screen flex flex-col text-brand-text animate-site-thump ${currentTrack ? 'pb-24' : ''}`}>
       <Header />
       <main className="flex-grow">
         <ReactRouterDOM.Outlet />

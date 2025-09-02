@@ -98,6 +98,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
            setUser(finalUser);
         }
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -194,6 +195,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     const checkGoogle = () => {
         if (window.google && window.google.accounts) {
+// FIX: Environment variables in Create React App must be prefixed with REACT_APP_.
              if (!process.env.REACT_APP_GOOGLE_CLIENT_ID) {
                 console.warn("REACT_APP_GOOGLE_CLIENT_ID environment variable not set. Google Sign-In will not work.");
                 toast.error("Google Sign-In is not configured by the administrator.", { duration: 6000 });
@@ -213,6 +215,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, [handleCredentialResponse]);
 
   const login = () => {
+// FIX: Environment variables in Create React App must be prefixed with REACT_APP_.
     if (!isGoogleReady || !process.env.REACT_APP_GOOGLE_CLIENT_ID) {
         toast.error("Google Sign-In is not configured or ready yet.");
         return;

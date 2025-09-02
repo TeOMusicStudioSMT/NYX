@@ -1,11 +1,13 @@
+
 import React, { useState } from 'react';
 import * as ReactRouterDOM from 'react-router-dom';
 import { useContent } from '../hooks/useContent';
 import { useAuth } from '../hooks/useAuth';
-import { PlayIcon, MusicNoteIcon, LockIcon, CrownIcon } from '../components/icons';
+import { PlayIcon, MusicNoteIcon, LockIcon, CrownIcon, MoreHorizontalIcon, PlusCircleIcon } from '../components/icons';
 import NotFoundPage from './NotFoundPage';
 import { Track, Release, SubscriptionTier, Artist } from '../types';
 import toast from 'react-hot-toast';
+import AddToPlaylistModal from '../components/AddToPlaylistModal';
 
 const tierOrder: Record<SubscriptionTier, number> = {
     [SubscriptionTier.FREE]: 0,
@@ -28,6 +30,7 @@ const isStreamableUrl = (url?: string): boolean => {
 const TrackItem: React.FC<{ track: Track, release: Release, artist: Artist }> = ({ track, release, artist }) => {
     const { playTrack } = useContent();
     const { user } = useAuth();
+    const [isPlaylistModalOpen, setIsPlaylistModalOpen] = useState(false);
     
     const requiredTier = track.accessTier || SubscriptionTier.FREE;
     const userTier = user?.tier || SubscriptionTier.FREE;
@@ -47,24 +50,41 @@ const TrackItem: React.FC<{ track: Track, release: Release, artist: Artist }> = 
     };
     
     return (
-        <div className="border-t border-brand-surface/50 flex items-center justify-between p-3 hover:bg-brand-surface/30 transition-colors duration-200">
-            <div className="flex items-center gap-2">
-                 <span className={`text-brand-text ${!canPlay ? 'opacity-50' : ''}`}>{track.title}</span>
-                 {requiredTier !== SubscriptionTier.FREE && (
-                     <div className="flex items-center text-xs px-2 py-0.5 rounded-full bg-brand-surface">
-                        {requiredTier === SubscriptionTier.VIP ? <CrownIcon className="w-3 h-3 text-yellow-400 mr-1"/> : <LockIcon className="w-3 h-3 text-brand-accent mr-1"/>}
-                        <span className="text-brand-text-secondary">{requiredTier}</span>
+        <>
+        {isPlaylistModalOpen && <AddToPlaylistModal trackId={track.id} onClose={() => setIsPlaylistModalOpen(false)} />}
+        <div className="border-t border-brand-surface/50 p-3 hover:bg-brand-surface/30 transition-colors duration-200 group">
+            <div className="flex items-center justify-between">
+                <div className="flex-1 min-w-0">
+                     <div className="flex items-center gap-2 mb-1">
+                         <span className={`text-brand-text truncate ${!canPlay ? 'opacity-50' : ''}`}>{track.title}</span>
+                         {requiredTier !== SubscriptionTier.FREE && (
+                             <div className="flex items-center text-xs px-2 py-0.5 rounded-full bg-brand-surface flex-shrink-0">
+                                {requiredTier === SubscriptionTier.VIP ? <CrownIcon className="w-3 h-3 text-yellow-400 mr-1"/> : <LockIcon className="w-3 h-3 text-brand-accent mr-1"/>}
+                                <span className="text-brand-text-secondary">{requiredTier}</span>
+                            </div>
+                         )}
                     </div>
-                 )}
+                    {track.description && (
+                        <p className="text-xs text-brand-text-secondary mt-1">{track.description}</p>
+                    )}
+                </div>
+                <div className="flex items-center">
+                    {user && (
+                         <button onClick={() => setIsPlaylistModalOpen(true)} className="ml-4 p-2 rounded-full text-brand-text-secondary hover:text-white opacity-0 group-hover:opacity-100 transition-opacity" title="Add to playlist">
+                            <PlusCircleIcon className="w-5 h-5" />
+                        </button>
+                    )}
+                    <button onClick={handlePlayClick} className={`ml-2 p-2 rounded-full transition-colors flex-shrink-0 ${
+                        canPlay
+                        ? 'text-brand-primary hover:bg-brand-primary hover:text-white'
+                        : 'text-brand-text-secondary/30 cursor-not-allowed'
+                    }`}>
+                        <PlayIcon className="w-5 h-5" />
+                    </button>
+                </div>
             </div>
-            <button onClick={handlePlayClick} className={`p-2 rounded-full transition-colors ${
-                canPlay
-                ? 'text-brand-primary hover:bg-brand-primary hover:text-white'
-                : 'text-brand-text-secondary/30 cursor-not-allowed'
-            }`}>
-                <PlayIcon className="w-5 h-5" />
-            </button>
         </div>
+        </>
     );
 };
 

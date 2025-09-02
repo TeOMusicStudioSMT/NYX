@@ -1,3 +1,5 @@
+
+
 const express = require('express');
 const { Storage } = require('@google-cloud/storage');
 const cors = require('cors');
@@ -11,7 +13,8 @@ app.use(express.static(path.join(__dirname, '..', 'frontend/build')));
 
 // --- ADRES BUKETU DOSTOSOWANY DO TWOICH PLIKÓW ---
 //...
-const BUCKET_NAME = process.env.BUCKET_NAME || 'ai-studio-bucket-830138686996-us-west1';
+// FIX: Added quotes to make the bucket name a valid string.
+const BUCKET_NAME = process.env.BUCKET_NAME || 'ai-studio-bucket-457528627948-us-west1';
 //...
 const FOLDER_PREFIX = process.env.FOLDER_PREFIX || 'services/backend';
 

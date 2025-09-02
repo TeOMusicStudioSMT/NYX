@@ -1,5 +1,3 @@
-
-
 import React, { createContext, useState, ReactNode, useEffect, useMemo, useRef } from 'react';
 import { Artist, NewsArticle, DisplayTrack, GalleryImage, PageID, StudioSubmission, SubmissionStatus, ConstellationItem, Release, Track, SpotlightItem, Playlist, CurrentlyPlayingTrack, Asset, TeoApp, FriendArtist, PlaylistCategory, SmtVideo, StudioActionCosts, ApiKeys, FooterContent, SpecializedAgent, JasonChatMessage } from '../types';
 import { 
@@ -52,6 +50,7 @@ interface ContentContextType extends ContentState {
   currentPlaylist: CurrentlyPlayingTrack[] | null;
   currentTrackIndex: number;
   trendingTracks: CurrentlyPlayingTrack[];
+  addArtist: (newArtist: Artist) => void;
   updateArtist: (updatedArtist: Artist) => void;
   updateNewsArticle: (updatedArticle: NewsArticle, index: number) => void;
   addNewsArticle: (newArticle: NewsArticle) => void;
@@ -114,8 +113,9 @@ const getInitialPersistedState = (): PersistedState => {
         const storedContent = localStorage.getItem(CONTENT_STORAGE_KEY);
         if (storedContent) {
             const parsed = JSON.parse(storedContent);
-            // Check for essential persisted properties to ensure data validity
-            if (parsed.artists && parsed.pageContents && parsed.footerContent && parsed.specializedAgents) {
+            // FIX: Ensure specializedAgents from localStorage is not an empty array before using it.
+            // This prevents the dashboard from getting stuck if the stored agent list is cleared.
+            if (parsed.artists && parsed.pageContents && parsed.footerContent && parsed.specializedAgents && parsed.specializedAgents.length > 0) {
                return parsed;
             }
         }
@@ -200,6 +200,16 @@ export const ContentProvider: React.FC<ContentProviderProps> = ({ children }) =>
         toast.error("Could not save session data. Changes may not be saved across reloads.", {id: 'storage-error'});
     }
   }, [state]);
+
+  const addArtist = (newArtist: Artist) => {
+    setState(prevState => {
+        if (prevState.artists.some(a => a.id.toLowerCase() === newArtist.id.toLowerCase())) {
+            toast.error(`An artist with ID '${newArtist.id}' already exists.`);
+            return prevState;
+        }
+        return { ...prevState, artists: [...prevState.artists, newArtist] };
+    });
+  };
 
   const updateArtist = (updatedArtist: Artist) => {
     setState(prevState => ({
@@ -454,6 +464,7 @@ export const ContentProvider: React.FC<ContentProviderProps> = ({ children }) =>
         currentPlaylist,
         currentTrackIndex,
         trendingTracks,
+        addArtist,
         updateArtist, 
         updateNewsArticle, 
         addNewsArticle, 

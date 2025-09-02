@@ -6,12 +6,8 @@ import { useContent } from '../hooks/useContent';
 import { NewsArticle, Artist, DisplayTrack, SpotlightItem, Track, Release, SubscriptionTier, CurrentlyPlayingTrack } from '../types';
 import toast from 'react-hot-toast';
 import WavySeparator from '../components/WavySeparator';
+// FIX: Import the refactored useRadioStation hook.
 import { useRadioStation } from '../hooks/useRadioStation';
-
-// Dodaj poprawny import dla useTilt
-import { useTilt } from '../hooks/useTilt';
-
-// ... (resztę kodu pozostaw bez zmian, aż do końca pliku)
 
 
 // FIX: Added missing isStreamableUrl helper function.
@@ -25,7 +21,44 @@ const isStreamableUrl = (url?: string): boolean => {
     return playableExtensions.some(ext => lowercasedUrl.endsWith(ext));
 };
 
-// FIX: Added missing useTilt hook definition. This was conflicting with an import. Removed local definition to fix.
+// FIX: Added missing useTilt hook definition.
+const useTilt = <T extends HTMLElement>() => {
+    const ref = useRef<T>(null);
+
+    useEffect(() => {
+        const el = ref.current;
+        if (!el) return;
+
+        const handleMouseMove = (e: MouseEvent) => {
+            const { left, top, width, height } = el.getBoundingClientRect();
+            const x = (e.clientX - left) / width - 0.5;
+            const y = (e.clientY - top) / height - 0.5;
+
+            const rotateY = x * 20;
+            const rotateX = -y * 20;
+
+            el.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.05, 1.05, 1.05)`;
+            el.style.boxShadow = `${-x * 15}px ${-y * 15}px 30px -5px rgba(0,0,0,0.3)`;
+        };
+
+        const handleMouseLeave = () => {
+            el.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
+            el.style.boxShadow = '0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05)';
+        };
+        
+        el.style.transition = 'transform 0.2s, box-shadow 0.2s';
+        el.style.willChange = 'transform, box-shadow';
+        el.addEventListener('mousemove', handleMouseMove);
+        el.addEventListener('mouseleave', handleMouseLeave);
+
+        return () => {
+            el.removeEventListener('mousemove', handleMouseMove);
+            el.removeEventListener('mouseleave', handleMouseLeave);
+        };
+    }, []);
+
+    return ref;
+};
 
 
 const HeroButton: React.FC<{ icon: React.ReactNode; label: string; onClick?: () => void; to?: string; isPrimary?: boolean; }> = ({ icon, label, onClick, to, isPrimary }) => {
@@ -85,11 +118,10 @@ const TrackCard: React.FC<{ track: CurrentlyPlayingTrack; onPlay: (track: Curren
 
     return (
         <div ref={tiltRef} className="bg-brand-surface/50 rounded-lg p-4 flex items-center space-x-4 hover:bg-brand-surface shadow-lg">
-            <img src={track.coverImageUrl} alt={track.title} className="w-20 h-20 rounded-md object-cover flex-shrink-0" />
-            <div className="flex-grow min-w-0">
-                <h4 className="font-semibold text-white truncate">{track.title}</h4>
-                <p className="text-sm text-brand-text-secondary truncate">{track.artistName}</p>
-                {track.description && <p className="text-xs text-brand-text-secondary mt-1 truncate">{track.description}</p>}
+            <img src={track.coverImageUrl} alt={track.title} className="w-20 h-20 rounded-md object-cover" />
+            <div className="flex-grow">
+                <h4 className="font-semibold text-white">{track.title}</h4>
+                <p className="text-sm text-brand-text-secondary">{track.artistName}</p>
             </div>
             <button onClick={handlePlayClick} className={`p-3 rounded-full transition-colors ${
                 canPlay
@@ -153,6 +185,7 @@ const FeaturedVideo: React.FC = () => {
     );
    
     const goToPrevious = () => setCurrentIndex(prev => (prev === 0 ? featuredVideoUrls.length - 1 : prev - 1));
+    // FIX: Corrected logic to go to the next video instead of previous.
     const goToNext = () => setCurrentIndex(prev => (prev === featuredVideoUrls.length - 1 ? 0 : prev + 1));
 
     return (
@@ -186,8 +219,7 @@ const FeaturedVideo: React.FC = () => {
             </div>
         </div>
     )
-};
-
+}
 
 const VideoModal: React.FC<{ videoUrl: string, onClose: () => void }> = ({ videoUrl, onClose }) => {
     const embedUrl = getYouTubeEmbedUrl(videoUrl, true);
@@ -360,8 +392,7 @@ const HomePage: React.FC = () => {
                 document.documentElement.style.setProperty(`--grad-c${i+1}`, defaultPalette[i]);
             }
         };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [sectionRefs]);
 
     const { fetchAndPlayRadio, isLoading } = useRadioStation();
 

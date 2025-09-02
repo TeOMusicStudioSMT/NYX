@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState, useCallback } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { useContent } from '../hooks/useContent';
 import { PlayFilledIcon, PauseFilledIcon, ChevronLeftIcon, ChevronRightIcon, XIcon, ChevronUpIcon, ChevronDownIcon, LayersIcon, Volume1Icon, Volume2Icon, VolumeXIcon } from './icons';
 import toast from 'react-hot-toast';
@@ -57,7 +57,7 @@ const AudioPlayer: React.FC = () => {
         }
     }, [volume]);
 
-     useEffect(() => {
+    useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (themePickerRef.current && !themePickerRef.current.contains(event.target as Node)) {
                 setIsThemePickerOpen(false);
@@ -86,9 +86,9 @@ const AudioPlayer: React.FC = () => {
         }
         
         return () => {
-             document.removeEventListener("mousedown", handleClickOutside);
+            document.removeEventListener("mousedown", handleClickOutside);
         };
-    }, []);
+    }, [volume]);
 
     useEffect(() => {
         const audio = audioRef.current;
@@ -100,7 +100,6 @@ const AudioPlayer: React.FC = () => {
                     sourceNodeRef.current = audioContextRef.current.createMediaElementSource(audio);
                     sourceNodeRef.current.connect(gainNodeRef.current);
                 } catch (e) {
-                    // This error can happen during development with hot-reloading. It's safe to ignore.
                     if (e instanceof DOMException && e.name === 'InvalidStateError') {
                         console.warn("Web Audio API source node already exists for this element.");
                     } else {
@@ -370,7 +369,7 @@ const AudioPlayer: React.FC = () => {
 
                     {/* Volume & Close */}
                     <div className="w-1/3 flex justify-end items-center gap-2">
-                         <button onClick={toggleMute} className="text-brand-text-secondary hover:text-white transition-colors" aria-label="Toggle mute">
+                        <button onClick={toggleMute} className="text-brand-text-secondary hover:text-white transition-colors" aria-label="Toggle mute">
                             <VolumeIcon />
                         </button>
                         <input type="range" min="0" max="1" step="0.01" value={volume} onChange={handleVolumeChange} className="w-24 h-1 bg-brand-surface rounded-lg appearance-none cursor-pointer range-thumb" aria-label="Volume control" />
@@ -383,17 +382,17 @@ const AudioPlayer: React.FC = () => {
                 .range-thumb { -webkit-appearance: none; appearance: none; background: transparent; }
                 .range-thumb::-webkit-slider-runnable-track { background-color: #242038; height: 0.25rem; border-radius: 0.5rem; }
                 .range-thumb::-moz-range-track { background-color: #242038; height: 0.25rem; border-radius: 0.5rem; }
-                .range-thumb::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 14px; height: 14px; background: #F0F0F0; cursor: pointer; border-radius: 50%; margin-top: -5px; }
-                .range-thumb::-moz-range-thumb { width: 14px; height: 14px; background: #F0F0F0; cursor: pointer; border-radius: 50%; border: none; }
-                .range-thumb:hover::-webkit-slider-thumb { background: #8A42DB; }
-                .range-thumb:hover::-moz-range-thumb { background: #8A42DB; }
+                .range-thumb::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 14px; height: 14px; background: #F0F0F0; cursor: pointer; border-radius: 50%; margin-top: -5px; box-shadow: 0 0 5px rgba(240, 240, 240, 0.5); }
+                .range-thumb::-moz-range-thumb { width: 14px; height: 14px; background: #F0F0F0; cursor: pointer; border-radius: 50%; border: none; box-shadow: 0 0 5px rgba(240, 240, 240, 0.5); }
+                .range-thumb:hover::-webkit-slider-thumb { background: #8A42DB; box-shadow: 0 0 8px rgba(138, 66, 219, 0.7); }
+                .range-thumb:hover::-moz-range-thumb { background: #8A42DB; box-shadow: 0 0 8px rgba(138, 66, 219, 0.7); }
 
                 /* Styles for Expanded Player Volume Slider */
                 .range-thumb-light { -webkit-appearance: none; background-color: transparent; }
                 .range-thumb-light::-webkit-slider-runnable-track { background-color: rgba(255,255,255,0.2); height: 0.25rem; border-radius: 0.5rem; }
                 .range-thumb-light::-moz-range-track { background-color: rgba(255,255,255,0.2); height: 0.25rem; border-radius: 0.5rem; }
-                .range-thumb-light::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 14px; height: 14px; background: #FFFFFF; cursor: pointer; border-radius: 50%; margin-top: -5px; }
-                .range-thumb-light::-moz-range-thumb { width: 14px; height: 14px; background: #FFFFFF; cursor: pointer; border-radius: 50%; border: none; }
+                .range-thumb-light::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 14px; height: 14px; background: #FFFFFF; cursor: pointer; border-radius: 50%; margin-top: -5px; box-shadow: 0 0 5px rgba(255, 255, 255, 0.5); }
+                .range-thumb-light::-moz-range-thumb { width: 14px; height: 14px; background: #FFFFFF; cursor: pointer; border-radius: 50%; border: none; box-shadow: 0 0 5px rgba(255, 255, 255, 0.5); }
                 
                 /* Styles for new Progress Bar slider */
                 .progress-slider { -webkit-appearance: none; appearance: none; background: transparent; cursor: pointer; }
@@ -401,8 +400,8 @@ const AudioPlayer: React.FC = () => {
                 .progress-slider::-moz-range-thumb { width: 1rem; height: 1rem; border-radius: 50%; background: #F0F0F0; border: none; opacity: 0; transition: opacity 0.2s, transform 0.2s; transform: scale(0.8); }
                 .progress-slider.light::-webkit-slider-thumb { background: #FFFFFF; }
                 .progress-slider.light::-moz-range-thumb { background: #FFFFFF; }
-                .group:hover .progress-slider::-webkit-slider-thumb { opacity: 1; transform: scale(1); }
-                .group:hover .progress-slider::-moz-range-thumb { opacity: 1; transform: scale(1); }
+                .group:hover .progress-slider::-webkit-slider-thumb { opacity: 1; transform: scale(1); box-shadow: 0 0 10px rgba(138, 66, 219, 0.7); }
+                .group:hover .progress-slider::-moz-range-thumb { opacity: 1; transform: scale(1); box-shadow: 0 0 10px rgba(138, 66, 219, 0.7); }
             `}</style>
         </>
     );

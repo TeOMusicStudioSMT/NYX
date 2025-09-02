@@ -46,6 +46,7 @@ export interface Track {
   title: string;
   sourceUrl?: string;
   accessTier?: SubscriptionTier;
+  description?: string;
 }
 
 export interface Release {

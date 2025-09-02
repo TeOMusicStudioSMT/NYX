@@ -94,6 +94,7 @@ const Header: React.FC = () => {
                     <div className="absolute right-0 mt-2 w-48 bg-brand-bg rounded-lg shadow-lg p-2 z-50">
                         {user && <NavItem to="/my-account" icon={<UsersIcon className="w-5 h-5" />} label="My Account" onClick={() => setMoreMenuOpen(false)} />}
                         {user && <NavItem to="/my-projects" icon={<FolderIcon className="w-5 h-5" />} label="My Projects" onClick={() => setMoreMenuOpen(false)} />}
+                        {user && <NavItem to="/my-playlists" icon={<PlaylistIcon className="w-5 h-5" />} label="My Playlists" onClick={() => setMoreMenuOpen(false)} />}
                         {user?.tier === SubscriptionTier.VIP && <NavItem to="/vip-lounge" icon={<CrownIcon className="w-5 h-5" />} label="VIP Lounge" onClick={() => setMoreMenuOpen(false)} />}
                         
                         <hr className="my-2 border-brand-surface/50" />
