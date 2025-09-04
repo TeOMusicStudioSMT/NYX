@@ -8,7 +8,8 @@ import { CurrentlyPlayingTrack } from '../types';
 const BUCKET_URL = "https://storage.googleapis.com/ai-studio-bucket-457528627948-us-west1/RADIO/";
 
 export const useRadioStation = () => {
-    const { setCurrentTrack } = useContent(); 
+    // FIX: Replaced non-existent 'setCurrentTrack' with 'playPlaylist' to correctly interact with the audio player context.
+    const { playPlaylist } = useContent(); 
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
@@ -50,7 +51,8 @@ export const useRadioStation = () => {
             
             if (tracks.length > 0) {
                 const shuffledTracks = [...tracks].sort(() => Math.random() - 0.5);
-                setCurrentTrack(shuffledTracks[0]);
+                // FIX: Replaced non-existent 'setCurrentTrack' with 'playPlaylist' to correctly start playback.
+                playPlaylist(shuffledTracks);
                 toast.success("Połączono z S.M.T. RADIO. Rozpoczynamy transmisję!");
             } else {
                 toast.error("W kosmosie panuje cisza. Żadnych utworów do odtworzenia.");

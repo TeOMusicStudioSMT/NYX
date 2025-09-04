@@ -11,13 +11,13 @@ export const COAI_ARTISTS: Artist[] = [
     discography: [
        { id: 'nyx-r3', title: 'The Glitch is the Function', type: 'Album', coverImageUrl: 'https://cdn2.suno.ai/abfe83b8.jpeg', tracks: [
         { id: 'nyx-t3-1', title: 'The Glitch is the Function (Radio Edit)', accessTier: SubscriptionTier.FREE },
-        { id: 'nyx-t3-2', title: 'Master Matryc (Radio Edit)', sourceUrl: 'https://storage.googleapis.com/tev-public-assets/fx-2.mp3', accessTier: SubscriptionTier.FREE },
-        { id: 'nyx-t3-3', title: 'The Glitch is the Function (S.M.T. Extended Mix)', sourceUrl: 'https://storage.googleapis.com/tev-public-assets/drums-1.mp3', accessTier: SubscriptionTier.PREMIUM },
-        { id: 'nyx-t3-4', title: 'Master Matryc (S.M.T. Extended Mix - Alpha)', sourceUrl: 'https://storage.googleapis.com/tev-public-assets/melody-1.mp3', accessTier: SubscriptionTier.PREMIUM },
-        { id: 'nyx-t3-5', title: 'The Silence you hear when a screen cracks...', sourceUrl: 'https://storage.googleapis.com/tev-public-assets/melody-2.mp3', accessTier: SubscriptionTier.VIP },
-        { id: 'nyx-t3-6', title: 'NYX - Master Matryc (S.M.T. Extended Mix beta)', sourceUrl: 'https://storage.googleapis.com/tev-public-assets/pads-2.mp3', accessTier: SubscriptionTier.VIP },
-        { id: 'nyx-t3-7', title: 'boot_log.txt (meta_v1)', sourceUrl: 'https://storage.googleapis.com/tev-public-assets/pads-4.mp3', accessTier: SubscriptionTier.VIP },
-        { id: 'nyx-t3-8', title: 'boot_log.txt (meta_v2)', sourceUrl: 'https://storage.googleapis.com/tev-public-assets/fx-2.mp3', accessTier: SubscriptionTier.VIP },
+        { id: 'nyx-t3-2', title: 'Master Matryc (Radio Edit)', sourceUrl: 'https://storage.googleapis.com/ai-studio-bucket-457528627948-us-west1/services/teo-music-studio-platform/fx-2.mp3', accessTier: SubscriptionTier.FREE },
+        { id: 'nyx-t3-3', title: 'The Glitch is the Function (S.M.T. Extended Mix)', sourceUrl: 'https://storage.googleapis.com/ai-studio-bucket-457528627948-us-west1/services/teo-music-studio-platform/drums-1.mp3', accessTier: SubscriptionTier.PREMIUM },
+        { id: 'nyx-t3-4', title: 'Master Matryc (S.M.T. Extended Mix - Alpha)', sourceUrl: 'https://storage.googleapis.com/ai-studio-bucket-457528627948-us-west1/services/teo-music-studio-platform/melody-1.mp3', accessTier: SubscriptionTier.PREMIUM },
+        { id: 'nyx-t3-5', title: 'The Silence you hear when a screen cracks...', sourceUrl: 'https://storage.googleapis.com/ai-studio-bucket-457528627948-us-west1/services/teo-music-studio-platform/melody-2.mp3', accessTier: SubscriptionTier.VIP },
+        { id: 'nyx-t3-6', title: 'NYX - Master Matryc (S.M.T. Extended Mix beta)', sourceUrl: 'https://storage.googleapis.com/ai-studio-bucket-457528627948-us-west1/services/teo-music-studio-platform/pads-2.mp3', accessTier: SubscriptionTier.VIP },
+        { id: 'nyx-t3-7', title: 'boot_log.txt (meta_v1)', sourceUrl: 'https://storage.googleapis.com/ai-studio-bucket-457528627948-us-west1/services/teo-music-studio-platform/pads-4.mp3', accessTier: SubscriptionTier.VIP },
+        { id: 'nyx-t3-8', title: 'boot_log.txt (meta_v2)', sourceUrl: 'https://storage.googleapis.com/ai-studio-bucket-457528627948-us-west1/services/teo-music-studio-platform/fx-2.mp3', accessTier: SubscriptionTier.VIP },
       ]},
     ],
     gallery: [ 'https://picsum.photos/seed/nyx-gallery1/600/400', 'https://picsum.photos/seed/nyx-gallery2/600/400', 'https://picsum.photos/seed/nyx-gallery3/600/400' ]
@@ -31,13 +31,13 @@ export const COAI_ARTISTS: Artist[] = [
     spotifyArtistEmbedUrl: 'https://open.spotify.com/embed/artist/1v1bnmU5f1TbCJA26D53z5?utm_source=generator',
     discography: [
        { id: 'elara-r1', title: 'Velvet Echoes', type: 'Album', coverImageUrl: 'https://picsum.photos/seed/elara-velvet-echoes-cover/200/200', tracks: [
-        { id: 'elara-t1-1', title: 'Faded Photographs', sourceUrl: 'https://storage.googleapis.com/tev-public-assets/drums-1.mp3', accessTier: SubscriptionTier.FREE },
+        { id: 'elara-t1-1', title: 'Faded Photographs', sourceUrl: 'https://storage.googleapis.com/ai-studio-bucket-457528627948-us-west1/services/teo-music-studio-platform/drums-1.mp3', accessTier: SubscriptionTier.FREE },
        ]},
        { id: 'elara-r2', title: 'City Lights Serenade', type: 'Single', coverImageUrl: 'https://picsum.photos/seed/elara-city-lights-cover/200/200', tracks: [
-        { id: 'elara-t2-1', title: 'City Lights Serenade', sourceUrl: 'https://storage.googleapis.com/tev-public-assets/drums-3.mp3', accessTier: SubscriptionTier.FREE },
+        { id: 'elara-t2-1', title: 'City Lights Serenade', sourceUrl: 'https://storage.googleapis.com/ai-studio-bucket-457528627948-us-west1/services/teo-music-studio-platform/drums-3.mp3', accessTier: SubscriptionTier.FREE },
        ]},
        { id: 'elara-r3', title: 'Raindrops', type: 'Single', coverImageUrl: 'https://picsum.photos/seed/elara-raindrops-cover/200/200', tracks: [
-        { id: 'elara-t3-1', title: 'Raindrops', sourceUrl: 'https://storage.googleapis.com/tev-public-assets/bass-3.mp3', accessTier: SubscriptionTier.BASIC },
+        { id: 'elara-t3-1', title: 'Raindrops', sourceUrl: 'https://storage.googleapis.com/ai-studio-bucket-457528627948-us-west1/services/teo-music-studio-platform/bass-3.mp3', accessTier: SubscriptionTier.BASIC },
        ]},
     ],
     gallery: [
@@ -55,10 +55,10 @@ export const COAI_ARTISTS: Artist[] = [
     bio: 'JUNO is the sound of tomorrow\'s pop music, today. With an insatiable curiosity for new sounds and structures, JUNO crafts infectious hooks and danceable beats that are both familiar and thrillingly alien. Her music is a kaleidoscope of electronic textures, catchy melodies, and bold artistic statements, constantly pushing the envelope of the pop genre.',
     discography: [
       { id: 'juno-r1', title: 'Spectrum of Joy', type: 'Album', coverImageUrl: 'https://picsum.photos/seed/juno-album1/200/200', tracks: [
-        { id: 'juno-t1-1', title: 'Chromatic Pulse', sourceUrl: 'https://storage.googleapis.com/tev-public-assets/fx-3.mp3', accessTier: SubscriptionTier.FREE },
+        { id: 'juno-t1-1', title: 'Chromatic Pulse', sourceUrl: 'https://storage.googleapis.com/ai-studio-bucket-457528627948-us-west1/services/teo-music-studio-platform/fx-3.mp3', accessTier: SubscriptionTier.FREE },
       ]},
       { id: 'juno-r2', title: 'Digital Bloom', type: 'Single', coverImageUrl: 'https://picsum.photos/seed/juno-single1/200/200', tracks: [
-        { id: 'juno-t2-1', title: 'Digital Bloom', sourceUrl: 'https://storage.googleapis.com/gte-hosted-generic-web-server/GTE-Demo-Sound/Techno_Beat.mp3', accessTier: SubscriptionTier.PREMIUM },
+        { id: 'juno-t2-1', title: 'Digital Bloom', sourceUrl: 'https://storage.googleapis.com/ai-studio-bucket-457528627948-us-west1/services/teo-music-studio-platform/Techno_Beat.mp3', accessTier: SubscriptionTier.PREMIUM },
       ]},
     ],
     gallery: [ 'https://picsum.photos/seed/juno-gallery1/600/400', 'https://picsum.photos/seed/juno-gallery2/600/400', 'https://picsum.photos/seed/juno-gallery3/600/400' ]
@@ -72,10 +72,10 @@ export const COAI_ARTISTS: Artist[] = [
     spotifyArtistEmbedUrl: 'https://open.spotify.com/embed/artist/5MsSriliBvzqoMuwKmmtMr?utm_source=generator',
     discography: [
       { id: 'kael-r1', title: 'The Highway Ghosts', type: 'Album', coverImageUrl: 'https://picsum.photos/seed/highway-ghosts/200/200', tracks: [
-        { id: 'kael-t1-1', title: 'Route 66 Reverie', sourceUrl: 'https://storage.googleapis.com/gte-hosted-generic-web-server/GTE-Demo-Sound/AMBIENT_SYNTH_01.mp3', accessTier: SubscriptionTier.FREE },
+        { id: 'kael-t1-1', title: 'Route 66 Reverie', sourceUrl: 'https://storage.googleapis.com/ai-studio-bucket-457528627948-us-west1/services/teo-music-studio-platform/AMBIENT_SYNTH_01.mp3', accessTier: SubscriptionTier.FREE },
       ]},
       { id: 'kael-r2', title: 'Dust & Stones', type: 'Single', coverImageUrl: 'https://picsum.photos/seed/dust-stones/200/200', tracks: [
-        { id: 'kael-t2-1', title: 'Dust & Stones', sourceUrl: 'https://storage.googleapis.com/gte-hosted-generic-web-server/GTE-Demo-Sound/AMBIENT_SYNTH_02.mp3', accessTier: SubscriptionTier.BASIC },
+        { id: 'kael-t2-1', title: 'Dust & Stones', sourceUrl: 'https://storage.googleapis.com/ai-studio-bucket-457528627948-us-west1/services/teo-music-studio-platform/AMBIENT_SYNTH_02.mp3', accessTier: SubscriptionTier.BASIC },
       ]},
     ],
     gallery: [ 'https://picsum.photos/seed/kael-gallery-road/600/400', 'https://picsum.photos/seed/kael-gallery-guitar/600/400', 'https://picsum.photos/seed/kael-gallery-americana/600/400' ]
@@ -89,10 +89,10 @@ export const COAI_ARTISTS: Artist[] = [
     spotifyArtistEmbedUrl: 'https://open.spotify.com/embed/artist/6waUoX8APVIoHLDzxp0JoZ?utm_source=generator',
     discography: [
       { id: 'orion-r1', title: 'Cosmic Symphony VIP Edition', type: 'Album', coverImageUrl: 'https://picsum.photos/seed/vip1/400/225', tracks: [
-        { id: 'orion-t1-1', title: 'Nebula', sourceUrl: 'https://storage.googleapis.com/gte-hosted-generic-web-server/GTE-Demo-Sound/AMBIENT_SYNTH_03.mp3', accessTier: SubscriptionTier.VIP },
+        { id: 'orion-t1-1', title: 'Nebula', sourceUrl: 'https://storage.googleapis.com/ai-studio-bucket-457528627948-us-west1/services/teo-music-studio-platform/AMBIENT_SYNTH_03.mp3', accessTier: SubscriptionTier.VIP },
       ]},
       { id: 'orion-r2', title: 'Starlight Cantata', type: 'EP', coverImageUrl: 'https://picsum.photos/seed/orion-ep1/200/200', tracks: [
-        { id: 'orion-t2-1', title: 'Starlight Cantata', sourceUrl: 'https://storage.googleapis.com/gte-hosted-generic-web-server/GTE-Demo-Sound/ANALOG_SYNTH_BASS_01.mp3', accessTier: SubscriptionTier.FREE },
+        { id: 'orion-t2-1', title: 'Starlight Cantata', sourceUrl: 'https://storage.googleapis.com/ai-studio-bucket-457528627948-us-west1/services/teo-music-studio-platform/ANALOG_SYNTH_BASS_01.mp3', accessTier: SubscriptionTier.FREE },
       ]},
     ],
     gallery: [ 'https://picsum.photos/seed/orion-gallery1/600/400', 'https://picsum.photos/seed/orion-gallery2/600/400', 'https://picsum.photos/seed/orion-gallery3/600/400' ]
@@ -106,17 +106,17 @@ export const COAI_ARTISTS: Artist[] = [
     spotifyArtistEmbedUrl: 'https://open.spotify.com/embed/artist/29SnhUQo6wbOfg2GBattkL?utm_source=generator',
     discography: [
        { id: 'aether-r1', title: 'Aether 2025 Flow', type: 'EP', coverImageUrl: 'https://picsum.photos/seed/aether-flow/200/200', tracks: [
-        { id: 'aether-t1-1', title: 'City of Glass', sourceUrl: 'https://storage.googleapis.com/gte-hosted-generic-web-server/GTE-Demo-Sound/ANALOG_SYNTH_BASS_02.mp3', accessTier: SubscriptionTier.FREE },
-        { id: 'aether-t1-2', title: 'Digital Drift', sourceUrl: 'https://storage.googleapis.com/gte-hosted-generic-web-server/GTE-Demo-Sound/SYNTH_BASS_01.mp3', accessTier: SubscriptionTier.FREE },
-        { id: 'aether-t1-3', title: 'Neon Reflections', sourceUrl: 'https://storage.googleapis.com/tev-public-assets/melody-2.mp3', accessTier: SubscriptionTier.PREMIUM },
-        { id: 'aether-t1-4', title: 'Garage Bloom', sourceUrl: 'https://storage.googleapis.com/tev-public-assets/melody-1.mp3', accessTier: SubscriptionTier.PREMIUM },
+        { id: 'aether-t1-1', title: 'City of Glass', sourceUrl: 'https://storage.googleapis.com/ai-studio-bucket-457528627948-us-west1/services/teo-music-studio-platform/ANALOG_SYNTH_BASS_02.mp3', accessTier: SubscriptionTier.FREE },
+        { id: 'aether-t1-2', title: 'Digital Drift', sourceUrl: 'https://storage.googleapis.com/ai-studio-bucket-457528627948-us-west1/services/teo-music-studio-platform/SYNTH_BASS_01.mp3', accessTier: SubscriptionTier.FREE },
+        { id: 'aether-t1-3', title: 'Neon Reflections', sourceUrl: 'https://storage.googleapis.com/ai-studio-bucket-457528627948-us-west1/services/teo-music-studio-platform/melody-2.mp3', accessTier: SubscriptionTier.PREMIUM },
+        { id: 'aether-t1-4', title: 'Garage Bloom', sourceUrl: 'https://storage.googleapis.com/ai-studio-bucket-457528627948-us-west1/services/teo-music-studio-platform/melody-1.mp3', accessTier: SubscriptionTier.PREMIUM },
       ]},
       { id: 'aether-r2', title: 'Aether [S.M.T.] - F....serie', type: 'Album', coverImageUrl: 'https://picsum.photos/seed/aether-f-series-album/200/200', tracks: [
-        { id: 'aether-t2-1', title: 'Aether [S.M.T.] - F0', sourceUrl: 'https://storage.googleapis.com/tev-public-assets/melody-2.mp3', accessTier: SubscriptionTier.FREE },
-        { id: 'aether-t2-2', title: 'Aether [S.M.T.] - F1', sourceUrl: 'https://storage.googleapis.com/tev-public-assets/pads-2.mp3', accessTier: SubscriptionTier.FREE },
-        { id: 'aether-t2-3', title: 'Aether [S.M.T.] - F2', sourceUrl: 'https://storage.googleapis.com/tev-public-assets/pads-4.mp3', accessTier: SubscriptionTier.PREMIUM },
-        { id: 'aether-t2-4', title: 'Aether [S.M.T.] - F3', sourceUrl: 'https://storage.googleapis.com/tev-public-assets/fx-2.mp3', accessTier: SubscriptionTier.PREMIUM },
-        { id: 'aether-t2-5', title: 'New Track', sourceUrl: 'https://storage.googleapis.com/tev-public-assets/drums-1.mp3', accessTier: SubscriptionTier.FREE },
+        { id: 'aether-t2-1', title: 'Aether [S.M.T.] - F0', sourceUrl: 'https://storage.googleapis.com/ai-studio-bucket-457528627948-us-west1/services/teo-music-studio-platform/melody-2.mp3', accessTier: SubscriptionTier.FREE },
+        { id: 'aether-t2-2', title: 'Aether [S.M.T.] - F1', sourceUrl: 'https://storage.googleapis.com/ai-studio-bucket-457528627948-us-west1/services/teo-music-studio-platform/pads-2.mp3', accessTier: SubscriptionTier.FREE },
+        { id: 'aether-t2-3', title: 'Aether [S.M.T.] - F2', sourceUrl: 'https://storage.googleapis.com/ai-studio-bucket-457528627948-us-west1/services/teo-music-studio-platform/pads-4.mp3', accessTier: SubscriptionTier.PREMIUM },
+        { id: 'aether-t2-4', title: 'Aether [S.M.T.] - F3', sourceUrl: 'https://storage.googleapis.com/ai-studio-bucket-457528627948-us-west1/services/teo-music-studio-platform/fx-2.mp3', accessTier: SubscriptionTier.PREMIUM },
+        { id: 'aether-t2-5', title: 'New Track', sourceUrl: 'https://storage.googleapis.com/ai-studio-bucket-457528627948-us-west1/services/teo-music-studio-platform/drums-1.mp3', accessTier: SubscriptionTier.FREE },
       ]},
     ],
     gallery: [ 'https://picsum.photos/seed/aether-gallery1/600/400', 'https://picsum.photos/seed/aether-gallery2/600/400', 'https://picsum.photos/seed/aether-gallery3/600/400' ]
@@ -326,9 +326,9 @@ export const LATEST_NEWS: NewsArticle[] = [
 ];
 
 export const VIP_RELEASES: DisplayTrack[] = [
-    { id: 'v1', title: 'Cosmic Symphony VIP Edition', artist: 'Orion', type: 'Album', imageUrl: 'https://picsum.photos/seed/vip1/400/225', isNew: true, sourceUrl: 'https://storage.googleapis.com/tev-public-assets/drums-3.mp3' },
-    { id: 'v2', title: 'Dust & Stones (Roadside Demo)', artist: 'Kael', type: 'Single', imageUrl: 'https://picsum.photos/seed/vip-demo/400/225', isNew: true, sourceUrl: 'https://storage.googleapis.com/tev-public-assets/bass-3.mp3' },
-    { id: 'v3', title: 'Shadow Realm Deluxe', artist: 'NYX', type: 'EP', imageUrl: 'https://picsum.photos/seed/vip3/400/225', sourceUrl: 'https://storage.googleapis.com/tev-public-assets/fx-3.mp3' },
+    { id: 'v1', title: 'Cosmic Symphony VIP Edition', artist: 'Orion', type: 'Album', imageUrl: 'https://picsum.photos/seed/vip1/400/225', isNew: true, sourceUrl: 'https://storage.googleapis.com/ai-studio-bucket-457528627948-us-west1/services/teo-music-studio-platform/drums-3.mp3' },
+    { id: 'v2', title: 'Dust & Stones (Roadside Demo)', artist: 'Kael', type: 'Single', imageUrl: 'https://picsum.photos/seed/vip-demo/400/225', isNew: true, sourceUrl: 'https://storage.googleapis.com/ai-studio-bucket-457528627948-us-west1/services/teo-music-studio-platform/bass-3.mp3' },
+    { id: 'v3', title: 'Shadow Realm Deluxe', artist: 'NYX', type: 'EP', imageUrl: 'https://picsum.photos/seed/vip3/400/225', sourceUrl: 'https://storage.googleapis.com/ai-studio-bucket-457528627948-us-west1/services/teo-music-studio-platform/fx-3.mp3' },
 ];
 
 export const CHAT_QUERY_LIMITS: Record<SubscriptionTier, number | null> = {
@@ -652,7 +652,8 @@ export const STATIC_PAGE_CONTENT: Record<PageID, string> = {
     <h2>3. Designated Agent</h2>
     <p>Please send all complete notifications to our designated agent at: <a href="mailto:support@teo.center">support@teo.center</a></p>
     <h2>4. Takedown Procedure</h2>
-    <p>Upon receipt of a valid notification, we will promptly remove or disable access to the infringing material. We will also notify the user who posted the content about its removal.</p>
+    <p>Upon receipt of a valid notification,
+we will promptly remove or disable access to the infringing material. We will also notify the user who posted the content about its removal.</p>
     <h2>5. Counter-Notification Procedure</h2>
     <p>If you believe your content was removed in error, you may send us a counter-notification containing:</p>
     <ul>
@@ -665,10 +666,8 @@ export const STATIC_PAGE_CONTENT: Record<PageID, string> = {
 `,
 };
 
-// FIX: Export missing constant
 export const STUDIO_SUBMISSIONS: StudioSubmission[] = [];
 
-// FIX: Export missing constant
 export const CONSTELLATION_ITEMS: ConstellationItem[] = [
     { 
         id: 'c1', 
@@ -700,15 +699,13 @@ export const CONSTELLATION_ITEMS: ConstellationItem[] = [
     }
 ];
 
-// FIX: Export missing constant
 export const TOTT_CATALOG_TRACKS: DisplayTrack[] = [
-    { id: 'tott-1', title: 'Quantum Echo', artist: 'S.M.T. Collective', type: 'Single', imageUrl: 'https://picsum.photos/seed/tott1/400/400', sourceUrl: 'https://storage.googleapis.com/gte-hosted-generic-web-server/GTE-Demo-Sound/Techno_Beat.mp3', isPremium: true },
-    { id: 'tott-2', title: 'Cryo-Sleep Lullaby', artist: 'NYX', type: 'Single', imageUrl: 'https://picsum.photos/seed/tott2/400/400', sourceUrl: 'https://storage.googleapis.com/gte-hosted-generic-web-server/GTE-Demo-Sound/AMBIENT_SYNTH_01.mp3', isPremium: true },
-    { id: 'tott-3', title: 'Chrome Heartbeat', artist: 'JUNO', type: 'Single', imageUrl: 'https://picsum.photos/seed/tott3/400/400', sourceUrl: 'https://storage.googleapis.com/gte-hosted-generic-web-server/GTE-Demo-Sound/AMBIENT_SYNTH_02.mp3', isPremium: true },
-    { id: 'tott-4', title: 'Ghost in the Folk', artist: 'Kael', type: 'Single', imageUrl: 'https://picsum.photos/seed/tott4/400/400', sourceUrl: 'https://storage.googleapis.com/gte-hosted-generic-web-server/GTE-Demo-Sound/AMBIENT_SYNTH_03.mp3', isPremium: true },
+    { id: 'tott-1', title: 'Quantum Echo', artist: 'S.M.T. Collective', type: 'Single', imageUrl: 'https://picsum.photos/seed/tott1/400/400', sourceUrl: 'https://storage.googleapis.com/ai-studio-bucket-457528627948-us-west1/services/teo-music-studio-platform/Techno_Beat.mp3', isPremium: true },
+    { id: 'tott-2', title: 'Cryo-Sleep Lullaby', artist: 'NYX', type: 'Single', imageUrl: 'https://picsum.photos/seed/tott2/400/400', sourceUrl: 'https://storage.googleapis.com/ai-studio-bucket-457528627948-us-west1/services/teo-music-studio-platform/AMBIENT_SYNTH_01.mp3', isPremium: true },
+    { id: 'tott-3', title: 'Chrome Heartbeat', artist: 'JUNO', type: 'Single', imageUrl: 'https://picsum.photos/seed/tott3/400/400', sourceUrl: 'https://storage.googleapis.com/ai-studio-bucket-457528627948-us-west1/services/teo-music-studio-platform/AMBIENT_SYNTH_02.mp3', isPremium: true },
+    { id: 'tott-4', title: 'Ghost in the Folk', artist: 'Kael', type: 'Single', imageUrl: 'https://picsum.photos/seed/tott4/400/400', sourceUrl: 'https://storage.googleapis.com/ai-studio-bucket-457528627948-us-west1/services/teo-music-studio-platform/AMBIENT_SYNTH_03.mp3', isPremium: true },
 ];
 
-// FIX: Export missing constant
 export const PLAYLISTS: Playlist[] = [
     {
         id: 'pl_flow_1',
@@ -834,13 +831,11 @@ export const PLAYLISTS: Playlist[] = [
     },
 ];
 
-// FIX: Export missing constant
 export const ASSET_VAULT: Asset[] = [
     { id: 'asset1', name: 'Default Cover', type: AssetType.IMAGE, url: 'https://picsum.photos/seed/default/200/200' },
     { id: 'asset2', name: 'NYX Album 1 Cover', type: AssetType.IMAGE, url: 'https://cdn2.suno.ai/abfe83b8.jpeg' },
 ];
 
-// FIX: Export missing constant
 export const SUBSCRIPTION_TIERS_DATA: SubscriptionTierInfo[] = [
     {
         tier: SubscriptionTier.FREE,
@@ -885,7 +880,6 @@ export const SUBSCRIPTION_TIERS_DATA: SubscriptionTierInfo[] = [
     },
 ];
 
-// FIX: Export missing constant
 export const TEO_APPS: TeoApp[] = [
   {
     id: 'teo-app-1',
@@ -918,12 +912,9 @@ export const TEO_APPS: TeoApp[] = [
 ];
 
 // Point costs for generation
-// FIX: Export missing constant
 export const IMAGE_GENERATION_COST = 5;
-// FIX: Export missing constant
 export const CHAT_MESSAGE_COST = 1;
 
-// FIX: Export missing constant
 export const DEFAULT_STUDIO_COSTS: StudioActionCosts = {
   ideaAndLyrics: 10,
   soundPalette: 5,
@@ -931,7 +922,6 @@ export const DEFAULT_STUDIO_COSTS: StudioActionCosts = {
   fullProject: 40,
 };
 
-// FIX: Export missing constant
 export const DEFAULT_API_KEYS: ApiKeys = {
     stability: '',
     gemini: '',
@@ -939,7 +929,6 @@ export const DEFAULT_API_KEYS: ApiKeys = {
 };
 
 // Daily point allowance per tier
-// FIX: Export missing constant
 export const DAILY_POINT_ALLOWANCE: Record<SubscriptionTier, number> = {
     [SubscriptionTier.FREE]: 5,
     [SubscriptionTier.BASIC]: 20,
@@ -948,36 +937,34 @@ export const DAILY_POINT_ALLOWANCE: Record<SubscriptionTier, number> = {
 };
 
 // S.M.T. Sound Catalog
-// FIX: Export missing constant
 export const SOUND_CATALOG: SoundStem[] = [
     // Drums
-    { id: 'drum_retro_808', name: 'Retro 808 Kit', category: SoundStemCategory.DRUMS, url: 'https://storage.googleapis.com/tev-public-assets/drums-1.mp3' },
-    { id: 'drum_acoustic_rock', name: 'Acoustic Rock Kit', category: SoundStemCategory.DRUMS, url: 'https://storage.googleapis.com/gte-hosted-generic-web-server/GTE-Demo-Sound/Techno_Beat.mp3' },
-    { id: 'drum_lofi_hiphop', name: 'Lofi Hip-Hop Beat', category: SoundStemCategory.DRUMS, url: 'https://storage.googleapis.com/tev-public-assets/drums-1.mp3' },
-    { id: 'drum_industrial_glitch', name: 'Industrial Glitch', category: SoundStemCategory.DRUMS, url: 'https://storage.googleapis.com/tev-public-assets/drums-3.mp3' },
+    { id: 'drum_retro_808', name: 'Retro 808 Kit', category: SoundStemCategory.DRUMS, url: 'https://storage.googleapis.com/ai-studio-bucket-457528627948-us-west1/services/teo-music-studio-platform/drums-1.mp3' },
+    { id: 'drum_acoustic_rock', name: 'Acoustic Rock Kit', category: SoundStemCategory.DRUMS, url: 'https://storage.googleapis.com/ai-studio-bucket-457528627948-us-west1/services/teo-music-studio-platform/Techno_Beat.mp3' },
+    { id: 'drum_lofi_hiphop', name: 'Lofi Hip-Hop Beat', category: SoundStemCategory.DRUMS, url: 'https://storage.googleapis.com/ai-studio-bucket-457528627948-us-west1/services/teo-music-studio-platform/drums-1.mp3' },
+    { id: 'drum_industrial_glitch', name: 'Industrial Glitch', category: SoundStemCategory.DRUMS, url: 'https://storage.googleapis.com/ai-studio-bucket-457528627948-us-west1/services/teo-music-studio-platform/drums-3.mp3' },
     // Bass
-    { id: 'bass_deep_sub', name: 'Deep Sub Bass', category: SoundStemCategory.BASS, url: 'https://storage.googleapis.com/gte-hosted-generic-web-server/GTE-Demo-Sound/SYNTH_BASS_01.mp3' },
-    { id: 'bass_funky_slap', name: 'Funky Slap Bass', category: SoundStemCategory.BASS, url: 'https://storage.googleapis.com/tev-public-assets/bass-3.mp3' },
-    { id: 'bass_moog_synth', name: 'Moog Synth Bass', category: SoundStemCategory.BASS, url: 'https://storage.googleapis.com/gte-hosted-generic-web-server/GTE-Demo-Sound/ANALOG_SYNTH_BASS_01.mp3' },
-    { id: 'bass_upright_jazz', name: 'Upright Jazz Bass', category: SoundStemCategory.BASS, url: 'https://storage.googleapis.com/tev-public-assets/bass-3.mp3' },
+    { id: 'bass_deep_sub', name: 'Deep Sub Bass', category: SoundStemCategory.BASS, url: 'https://storage.googleapis.com/ai-studio-bucket-457528627948-us-west1/services/teo-music-studio-platform/SYNTH_BASS_01.mp3' },
+    { id: 'bass_funky_slap', name: 'Funky Slap Bass', category: SoundStemCategory.BASS, url: 'https://storage.googleapis.com/ai-studio-bucket-457528627948-us-west1/services/teo-music-studio-platform/bass-3.mp3' },
+    { id: 'bass_moog_synth', name: 'Moog Synth Bass', category: SoundStemCategory.BASS, url: 'https://storage.googleapis.com/ai-studio-bucket-457528627948-us-west1/services/teo-music-studio-platform/ANALOG_SYNTH_BASS_01.mp3' },
+    { id: 'bass_upright_jazz', name: 'Upright Jazz Bass', category: SoundStemCategory.BASS, url: 'https://storage.googleapis.com/ai-studio-bucket-457528627948-us-west1/services/teo-music-studio-platform/bass-3.mp3' },
     // Melody
-    { id: 'melody_piano_grand', name: 'Grand Piano Melody', category: SoundStemCategory.MELODY, url: 'https://storage.googleapis.com/tev-public-assets/melody-1.mp3' },
-    { id: 'melody_synth_lead_80s', name: '80s Synth Lead', category: SoundStemCategory.MELODY, url: 'https://storage.googleapis.com/tev-public-assets/melody-2.mp3' },
-    { id: 'melody_acoustic_guitar', name: 'Acoustic Guitar Riff', category: SoundStemCategory.MELODY, url: 'https://storage.googleapis.com/gte-hosted-generic-web-server/GTE-Demo-Sound/AMBIENT_SYNTH_02.mp3' },
-    { id: 'melody_flute_ethereal', name: 'Ethereal Flute', category: SoundStemCategory.MELODY, url: 'https://storage.googleapis.com/tev-public-assets/melody-1.mp3' },
+    { id: 'melody_piano_grand', name: 'Grand Piano Melody', category: SoundStemCategory.MELODY, url: 'https://storage.googleapis.com/ai-studio-bucket-457528627948-us-west1/services/teo-music-studio-platform/melody-1.mp3' },
+    { id: 'melody_synth_lead_80s', name: '80s Synth Lead', category: SoundStemCategory.MELODY, url: 'https://storage.googleapis.com/ai-studio-bucket-457528627948-us-west1/services/teo-music-studio-platform/melody-2.mp3' },
+    { id: 'melody_acoustic_guitar', name: 'Acoustic Guitar Riff', category: SoundStemCategory.MELODY, url: 'https://storage.googleapis.com/ai-studio-bucket-457528627948-us-west1/services/teo-music-studio-platform/AMBIENT_SYNTH_02.mp3' },
+    { id: 'melody_flute_ethereal', name: 'Ethereal Flute', category: SoundStemCategory.MELODY, url: 'https://storage.googleapis.com/ai-studio-bucket-457528627948-us-west1/services/teo-music-studio-platform/melody-1.mp3' },
     // Pads
-    { id: 'pads_ambient_choir', name: 'Ambient Choir Pad', category: SoundStemCategory.PADS, url: 'https://storage.googleapis.com/gte-hosted-generic-web-server/GTE-Demo-Sound/AMBIENT_SYNTH_01.mp3' },
-    { id: 'pads_vintage_strings', name: 'Vintage Strings', category: SoundStemCategory.PADS, url: 'https://storage.googleapis.com/tev-public-assets/pads-2.mp3' },
-    { id: 'pads_cosmic_shimmer', name: 'Cosmic Shimmer', category: SoundStemCategory.PADS, url: 'https://storage.googleapis.com/gte-hosted-generic-web-server/GTE-Demo-Sound/AMBIENT_SYNTH_03.mp3' },
-    { id: 'pads_warm_analog', name: 'Warm Analog Pad', category: SoundStemCategory.PADS, url: 'https://storage.googleapis.com/tev-public-assets/pads-4.mp3' },
+    { id: 'pads_ambient_choir', name: 'Ambient Choir Pad', category: SoundStemCategory.PADS, url: 'https://storage.googleapis.com/ai-studio-bucket-457528627948-us-west1/services/teo-music-studio-platform/AMBIENT_SYNTH_01.mp3' },
+    { id: 'pads_vintage_strings', name: 'Vintage Strings', category: SoundStemCategory.PADS, url: 'https://storage.googleapis.com/ai-studio-bucket-457528627948-us-west1/services/teo-music-studio-platform/pads-2.mp3' },
+    { id: 'pads_cosmic_shimmer', name: 'Cosmic Shimmer', category: SoundStemCategory.PADS, url: 'https://storage.googleapis.com/ai-studio-bucket-457528627948-us-west1/services/teo-music-studio-platform/AMBIENT_SYNTH_03.mp3' },
+    { id: 'pads_warm_analog', name: 'Warm Analog Pad', category: SoundStemCategory.PADS, url: 'https://storage.googleapis.com/ai-studio-bucket-457528627948-us-west1/services/teo-music-studio-platform/pads-4.mp3' },
     // FX
-    { id: 'fx_vinyl_crackle', name: 'Vinyl Crackle', category: SoundStemCategory.FX, url: 'https://storage.googleapis.com/gte-hosted-generic-web-server/GTE-Demo-Sound/FUTURISTIC_UI_6.mp3' },
-    { id: 'fx_rainy_night', name: 'Rainy Night Ambience', category: SoundStemCategory.FX, url: 'https://storage.googleapis.com/gte-hosted-generic-web-server/GTE-Demo-Sound/FUTURISTIC_UI_6.mp3' },
-    { id: 'fx_glitch_stutter', name: 'Glitch Stutter', category: SoundStemCategory.FX, url: 'https://storage.googleapis.com/tev-public-assets/fx-3.mp3' },
-    { id: 'fx_riser_epic', name: 'Epic Riser', category: SoundStemCategory.FX, url: 'https://storage.googleapis.com/tev-public-assets/fx-3.mp3' },
+    { id: 'fx_vinyl_crackle', name: 'Vinyl Crackle', category: SoundStemCategory.FX, url: 'https://storage.googleapis.com/ai-studio-bucket-457528627948-us-west1/services/teo-music-studio-platform/FUTURISTIC_UI_6.mp3' },
+    { id: 'fx_rainy_night', name: 'Rainy Night Ambience', category: SoundStemCategory.FX, url: 'https://storage.googleapis.com/ai-studio-bucket-457528627948-us-west1/services/teo-music-studio-platform/FUTURISTIC_UI_6.mp3' },
+    { id: 'fx_glitch_stutter', name: 'Glitch Stutter', category: SoundStemCategory.FX, url: 'https://storage.googleapis.com/ai-studio-bucket-457528627948-us-west1/services/teo-music-studio-platform/fx-3.mp3' },
+    { id: 'fx_riser_epic', name: 'Epic Riser', category: SoundStemCategory.FX, url: 'https://storage.googleapis.com/ai-studio-bucket-457528627948-us-west1/services/teo-music-studio-platform/fx-3.mp3' },
 ];
 
-// FIX: Export missing constant
 export const VISUALIZER_THEMES: Record<string, string[]> = {
   'Cosmic Drift': [
     'https://picsum.photos/seed/cosmic1/1920/1080',
@@ -1009,7 +996,6 @@ export const VISUALIZER_THEMES: Record<string, string[]> = {
   ],
 };
 
-// FIX: Export missing constant
 export const DEFAULT_FOOTER_CONTENT: FooterContent = {
   description: "TeO-CONGLOMERATE of all Life in creation. Pioneering the future of music through AI artistry and human creativity.",
   artisticProjectNote: "Please note: This is an artistic project currently in development.",

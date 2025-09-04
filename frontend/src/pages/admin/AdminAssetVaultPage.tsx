@@ -5,7 +5,7 @@ import { Asset, AssetType, SoundStemCategory } from '../../types';
 import { COAI_ARTISTS, SOUND_CATALOG } from '../../constants';
 import { FolderIcon, ImageIcon, MusicNoteIcon, CopyIcon, Trash2Icon, ChevronRightIcon } from '../../components/icons';
 
-const BUCKET_URL = 'gs://run-sources-cs-poc-31qxw5uyzvr3wofztvtsfan-europe-west3';
+const BUCKET_URL = 'gs://ai-studio-bucket-457528627948-us-west1';
 
 const AdminAssetVaultPage: React.FC = () => {
     const { assetVault, addAsset, deleteAsset } = useContent();

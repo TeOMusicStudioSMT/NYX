@@ -27,6 +27,13 @@ export interface UserProject {
     };
 }
 
+// FIX: Added missing UserPlaylist interface
+export interface UserPlaylist {
+  id: string;
+  title: string;
+  description: string;
+  trackIds: string[];
+}
 
 export interface User {
   name: string;
@@ -39,6 +46,8 @@ export interface User {
   memberSince: string;
   lastLogin?: string;
   projects: UserProject[];
+  // FIX: Added missing playlists property
+  playlists?: UserPlaylist[];
 }
 
 export interface Track {

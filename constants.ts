@@ -1,3 +1,4 @@
+
 import { User, Artist, NewsArticle, DisplayTrack, SubscriptionTier, GalleryImage, PageID, StudioSubmission, ConstellationItem, Release, SpotlightItem, Playlist, Asset, AssetType, SubscriptionTierInfo, TeoApp, PointPackage, PlaylistCategory, FriendArtist, SoundStem, SoundStemCategory, SmtVideo, StudioActionCosts, ApiKeys, FooterContent, SpecializedAgent } from './types';
 
 export const COAI_ARTISTS: Artist[] = [
@@ -141,7 +142,7 @@ TWOJA ROLA JAKO DYREKTORA:
 ZESPÓŁ TWOICH ASYSTENTÓW AI:
 [AGENT_LIST_PLACEHOLDER]
 
-SPOSÓB INTERAKCIJ (DIRECTOR MODE):
+SPOSÓB INTERAKCIJI (DIRECTOR MODE):
 Gdy użytkownik przedstawia Ci pomysł:
 1.  **Analiza Holistyczna:** Zrozum intencję.
 2.  **Werdykt i Delegacja (Wewnętrzny Proces):** (To dzieje się w tle) Błyskawicznie decydujesz, który agent wykona zadanie.
@@ -652,7 +653,8 @@ export const STATIC_PAGE_CONTENT: Record<PageID, string> = {
     <h2>3. Designated Agent</h2>
     <p>Please send all complete notifications to our designated agent at: <a href="mailto:support@teo.center">support@teo.center</a></p>
     <h2>4. Takedown Procedure</h2>
-    <p>Upon receipt of a valid notification, we will promptly remove or disable access to the infringing material. We will also notify the user who posted the content about its removal.</p>
+    <p>Upon receipt of a valid notification,
+we will promptly remove or disable access to the infringing material. We will also notify the user who posted the content about its removal.</p>
     <h2>5. Counter-Notification Procedure</h2>
     <p>If you believe your content was removed in error, you may send us a counter-notification containing:</p>
     <ul>
@@ -665,6 +667,7 @@ export const STATIC_PAGE_CONTENT: Record<PageID, string> = {
 `,
 };
 
+// FIX: Added missing exported constants to resolve module import errors.
 export const STUDIO_SUBMISSIONS: StudioSubmission[] = [];
 
 export const CONSTELLATION_ITEMS: ConstellationItem[] = [

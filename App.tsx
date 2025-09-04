@@ -1,4 +1,5 @@
 
+
 import React from 'react';
 import * as ReactRouterDOM from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
@@ -6,6 +7,7 @@ import { ContentProvider } from './context/ContentContext';
 import { Toaster } from 'react-hot-toast';
 
 import Layout from './components/Layout';
+// FIX: Changed to a default import as the component is exported as default.
 import HomePage from './pages/HomePage';
 import ArtistsPage from './pages/ArtistsPage';
 import ArtistProfilePage from './pages/ArtistProfilePage';
@@ -29,6 +31,9 @@ import StorePage from './pages/StorePage';
 import MyProjectsPage from './pages/MyProjectsPage';
 import VideosPage from './pages/VideosPage';
 import MyAccountPage from './pages/MyAccountPage';
+import MyPlaylistsPage from './pages/MyPlaylistsPage';
+import UserPlaylistDetailPage from './pages/UserPlaylistDetailPage';
+
 
 // Admin Imports
 import AdminLoginPage from './pages/admin/AdminLoginPage';
@@ -101,6 +106,8 @@ const App: React.FC = () => {
               <ReactRouterDOM.Route path="chat" element={<ChatPage />} />
               <ReactRouterDOM.Route path="store" element={<StorePage />} />
               <ReactRouterDOM.Route path="my-projects" element={<MyProjectsPage />} />
+              <ReactRouterDOM.Route path="my-playlists" element={<MyPlaylistsPage />} />
+              <ReactRouterDOM.Route path="my-playlists/:playlistId" element={<UserPlaylistDetailPage />} />
               <ReactRouterDOM.Route path="my-account" element={<MyAccountPage />} />
               <ReactRouterDOM.Route path="subscriptions" element={<SubscriptionsPage />} />
               <ReactRouterDOM.Route path="checkout" element={<CheckoutPage />} />

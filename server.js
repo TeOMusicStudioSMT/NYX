@@ -1,3 +1,5 @@
+
+
 const express = require('express');
 const { Storage } = require('@google-cloud/storage');
 const cors = require('cors');
@@ -6,7 +8,8 @@ const app = express();
 app.use(cors());
 
 // --- ADRES BUKETU DOSTOSOWANY DO TWOICH PLIKÓW ---
-const BUCKET_NAME = process.env.BUCKET_NAME || ''ai-studio-bucket-830138686996-us-west1'';
+// FIX: Removed extra single quotes causing a syntax error.
+const BUCKET_NAME = process.env.BUCKET_NAME || 'ai-studio-bucket-457528627948-us-west1';
 const FOLDER_PREFIX = process.env.FOLDER_PREFIX || 'services/backend';
 
 const storage = new Storage();

@@ -1,3 +1,4 @@
+
 import React, { createContext, useState, ReactNode, useEffect, useMemo, useRef } from 'react';
 import { Artist, NewsArticle, DisplayTrack, GalleryImage, PageID, StudioSubmission, SubmissionStatus, ConstellationItem, Release, Track, SpotlightItem, Playlist, CurrentlyPlayingTrack, Asset, TeoApp, FriendArtist, PlaylistCategory, SmtVideo, StudioActionCosts, ApiKeys, FooterContent, SpecializedAgent, JasonChatMessage } from '../types';
 import { 
@@ -113,9 +114,9 @@ const getInitialPersistedState = (): PersistedState => {
         const storedContent = localStorage.getItem(CONTENT_STORAGE_KEY);
         if (storedContent) {
             const parsed = JSON.parse(storedContent);
-            // FIX: Ensure specializedAgents from localStorage is not an empty array before using it.
-            // This prevents the dashboard from getting stuck if the stored agent list is cleared.
-            if (parsed.artists && parsed.pageContents && parsed.footerContent && parsed.specializedAgents && parsed.specializedAgents.length > 0) {
+            // FIX: Relaxed the validation check. The previous check discarded all saved data if
+            // the specializedAgents array was empty. This new check is more robust.
+            if (parsed.artists && parsed.pageContents && parsed.footerContent && parsed.specializedAgents) {
                return parsed;
             }
         }

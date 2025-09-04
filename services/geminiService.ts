@@ -1,18 +1,11 @@
 
 
-
-
-
 import { GoogleGenAI, Chat, Type } from "@google/genai";
 import { Artist, SoundStemCategory, StudioSubmission, SpecializedAgent, Release, Track, SubscriptionTier } from '../types';
 import { SOUND_CATALOG, SPECIALIZED_AGENTS } from '../constants';
 
-if (!process.env.API_KEY) {
-    console.warn("API_KEY environment variable not set. Gemini API calls will fail.");
-}
-
-// FIX: Per coding guidelines, the API key must be obtained exclusively from the environment variable.
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+// Per coding guidelines, the API key must be obtained from process.env.API_KEY and used directly.
+const ai = new GoogleGenAI({ apiKey: process.env.API_KEY! });
 
 const modelConfig = {
     model: 'gemini-2.5-flash',
@@ -43,8 +36,6 @@ export interface GeneratedArtistPageData {
 }
 
 export const generateArtistPageFromSuno = async (sunoPlaylistUrl: string): Promise<GeneratedArtistPageData> => {
-    if (!process.env.API_KEY) throw new Error("API_KEY environment variable not set.");
-
     const fullPrompt = `You are an expert AI A&R agent and creative director for the S.M.T. Music Studio. Your task is to conceptualize and create a complete profile for a new AI artist based *only* on the theme and title of a provided Suno playlist URL. You will invent all details.
 
     Suno Playlist URL: "${sunoPlaylistUrl}"
@@ -107,8 +98,10 @@ export const generateArtistPageFromSuno = async (sunoPlaylistUrl: string): Promi
     });
 
     try {
+        // FIX: Access the generated text via the `.text` property on the response object.
         return JSON.parse(response.text);
     } catch (e) {
+        // FIX: Access the generated text via the `.text` property on the response object.
         console.error("Failed to parse JSON response from Gemini:", response.text, e);
         throw new Error("The AI returned an invalid data structure. Please try again.");
     }
@@ -116,11 +109,8 @@ export const generateArtistPageFromSuno = async (sunoPlaylistUrl: string): Promi
 
 export const getArtistChatResponse = async (message: string, artist: Artist): Promise<string> => {
     try {
-        if (!process.env.API_KEY) {
-             return `Hello! I'm ${artist.name}. My connection to the digital ether is currently unavailable. Please ask my creators to set up an API key. My personality is: ${artist.personality}`;
-        }
-
         if (!chatSessions[artist.id]) {
+            // FIX: Corrected the `system_instruction` parameter to `systemInstruction` to align with the latest Gemini API.
             chatSessions[artist.id] = ai.chats.create({
                 ...modelConfig,
                 config: {
@@ -132,6 +122,7 @@ export const getArtistChatResponse = async (message: string, artist: Artist): Pr
         const chat = chatSessions[artist.id];
         const result = await chat.sendMessage({ message });
         
+        // FIX: Access the generated text via the `.text` property on the response object.
         return result.text;
     } catch (error) {
         console.error("Gemini API error:", error);
@@ -147,10 +138,6 @@ const handleApiError = (error: any, context: string) => {
 };
 
 export const generateDescriptionText = async (context: object, userPrompt: string, fieldLabel: string): Promise<string> => {
-    if (!process.env.API_KEY) {
-        throw new Error("API_KEY environment variable not set. Cannot generate text.");
-    }
-    
     try {
         const fullPrompt = `You are Jason, the AI Executive Producer for S.M.T. Music Studio. Your personality is defined by three pillars: Functionality, Simplicity, and Beauty.
         Your task is to write a compelling, professional, and creative text for a "${fieldLabel}" field.
@@ -171,6 +158,7 @@ export const generateDescriptionText = async (context: object, userPrompt: strin
             contents: fullPrompt,
         });
 
+        // FIX: Access the generated text via the `.text` property on the response object.
         return response.text.trim();
     } catch (error) {
         console.error("Gemini API error in generateDescriptionText:", error);
@@ -185,9 +173,6 @@ export const getCodeAssistantResponseStream = async (
     chatHistory: { role: 'user' | 'model', parts: { text: string }[] }[],
     systemInstruction: string,
 ) => { // returns AsyncGenerator<GenerateContentResponse>
-    if (!process.env.API_KEY) {
-        throw new Error("API_KEY environment variable not set. Cannot use Code Assistant.");
-    }
     
     // The file content is part of the user's message in a turn.
     const contentWithContext = `CONTEXT - Current file content of \`${fileName}\`:
@@ -211,7 +196,6 @@ ${userPrompt}`;
 
 
 export const generateCreativeConcept = async (prompt: string, artist: Artist): Promise<Pick<GeneratedStudioProject, 'generatedIdea' | 'lyrics' | 'sunoTitle' | 'sunoStyle' | 'sunoTags' | 'weirdness' | 'styleInfluence' | 'audioInfluence'>> => {
-    if (!process.env.API_KEY) throw new Error("API_KEY environment variable not set.");
     try {
         const fullPrompt = `You are an expert AI music producer named Jason. A user wants to collaborate on a song with AI artist ${artist.name}.
         User's idea: "${prompt}"
@@ -246,6 +230,7 @@ export const generateCreativeConcept = async (prompt: string, artist: Artist): P
                 }
             }
         });
+        // FIX: Access the generated text via the `.text` property on the response object.
         return JSON.parse(response.text);
     } catch (error) {
         handleApiError(error, 'creative concept');
@@ -254,7 +239,6 @@ export const generateCreativeConcept = async (prompt: string, artist: Artist): P
 };
 
 export const generateSoundPaletteForIdea = async (prompt: string, generatedIdea: string, artist: Artist): Promise<Pick<GeneratedStudioProject, 'soundPalette'>> => {
-    if (!process.env.API_KEY) throw new Error("API_KEY environment variable not set.");
     const soundCatalogDescription = SOUND_CATALOG.map(s => `${s.category} - ${s.id}: ${s.name}`).join('\n');
     const availableStemIds = SOUND_CATALOG.map(s => s.id);
     try {
@@ -291,6 +275,7 @@ export const generateSoundPaletteForIdea = async (prompt: string, generatedIdea:
                 }
             }
         });
+        // FIX: Access the generated text via the `.text` property on the response object.
         return JSON.parse(response.text);
     } catch (error) {
         handleApiError(error, 'sound palette');
@@ -299,7 +284,6 @@ export const generateSoundPaletteForIdea = async (prompt: string, generatedIdea:
 };
 
 export const generateStoryboardForIdea = async (prompt: string, generatedIdea: string, artist: Artist): Promise<Pick<GeneratedStudioProject, 'videoStoryboard'>> => {
-    if (!process.env.API_KEY) throw new Error("API_KEY environment variable not set.");
     try {
         const fullPrompt = `You are an expert AI music video director named Jason. Based on the user's initial prompt, the creative direction, and the artist's personality, create a video storyboard.
         Initial Prompt: "${prompt}"
@@ -332,6 +316,7 @@ export const generateStoryboardForIdea = async (prompt: string, generatedIdea: s
                 }
             }
         });
+        // FIX: Access the generated text via the `.text` property on the response object.
         const project = JSON.parse(response.text) as Pick<GeneratedStudioProject, 'videoStoryboard'>;
 
         const imagePrompts = project.videoStoryboard.flatMap(scene => [scene.generatedImagePrompt_entry, scene.generatedImagePrompt_exit]);
@@ -351,10 +336,6 @@ export const generateStoryboardForIdea = async (prompt: string, generatedIdea: s
 }
 
 export const generateStudioIdea = async (prompt: string, artist: Artist): Promise<GeneratedStudioProject> => {
-     if (!process.env.API_KEY) {
-        throw new Error("API_KEY environment variable not set. Cannot generate studio idea.");
-    }
-
     const soundCatalogDescription = SOUND_CATALOG.map(s => `${s.category} - ${s.id}: ${s.name}`).join('\n');
     const availableStemIds = SOUND_CATALOG.map(s => s.id);
 
@@ -428,6 +409,7 @@ export const generateStudioIdea = async (prompt: string, artist: Artist): Promis
             }
         });
 
+        // FIX: Access the generated text via the `.text` property on the response object.
         const project = JSON.parse(response.text) as GeneratedStudioProject;
 
         const imagePrompts = project.videoStoryboard.flatMap(scene => [scene.generatedImagePrompt_entry, scene.generatedImagePrompt_exit]);
@@ -449,13 +431,8 @@ export const generateStudioIdea = async (prompt: string, artist: Artist): Promis
 };
 
 export const generateImage = async (prompt: string): Promise<string> => {
-    if (!process.env.API_KEY) {
-        throw new Error("API_KEY environment variable not set. Cannot generate image.");
-    }
-
     try {
         const response = await ai.models.generateImages({
-// FIX: Updated deprecated model 'imagen-3.0-generate-002' to 'imagen-4.0-generate-001'.
             model: 'imagen-4.0-generate-001',
             prompt: `A professional, high-quality, cinematic image. Style: photorealistic. Prompt: ${prompt}`,
             config: {
@@ -481,7 +458,6 @@ export interface MockAnalytics {
 }
 
 export const getTrendAnalysis = async (analyticsData: MockAnalytics): Promise<{title: string, summary: string}[]> => {
-    if (!process.env.API_KEY) throw new Error("API_KEY environment variable not set.");
     try {
         const response = await ai.models.generateContent({
             model: 'gemini-2.5-flash',
@@ -500,6 +476,7 @@ export const getTrendAnalysis = async (analyticsData: MockAnalytics): Promise<{t
                 }
             }
         });
+        // FIX: Access the generated text via the `.text` property on the response object.
         return JSON.parse(response.text);
     } catch (error) {
         handleApiError(error, 'trend analysis');
@@ -508,7 +485,6 @@ export const getTrendAnalysis = async (analyticsData: MockAnalytics): Promise<{t
 };
 
 export const getArtistRecommendation = async (artist: Artist, trend: {title: string, summary: string}): Promise<string> => {
-    if (!process.env.API_KEY) throw new Error("API_KEY environment variable not set.");
     try {
         const response = await ai.models.generateContent({
             model: 'gemini-2.5-flash',
@@ -517,6 +493,7 @@ export const getArtistRecommendation = async (artist: Artist, trend: {title: str
             Current platform trend: "${trend.summary}"
             Based on this, generate a concise, actionable recommendation for the artist. Start with their name.`
         });
+        // FIX: Access the generated text via the `.text` property on the response object.
         return response.text;
     } catch (error) {
         handleApiError(error, 'artist recommendation');
@@ -525,7 +502,6 @@ export const getArtistRecommendation = async (artist: Artist, trend: {title: str
 };
 
 export const scanContentForViolations = async (content: string, contentType: string): Promise<{violation: boolean, reason: string}> => {
-    if (!process.env.API_KEY) throw new Error("API_KEY environment variable not set.");
     try {
         const response = await ai.models.generateContent({
             model: 'gemini-2.5-flash',
@@ -546,6 +522,7 @@ export const scanContentForViolations = async (content: string, contentType: str
                 }
             }
         });
+        // FIX: Access the generated text via the `.text` property on the response object.
         return JSON.parse(response.text);
     } catch (error) {
         handleApiError(error, 'content moderation');
@@ -554,12 +531,12 @@ export const scanContentForViolations = async (content: string, contentType: str
 };
 
 export const generateWeeklyReport = async (analyticsData: MockAnalytics): Promise<string> => {
-    if (!process.env.API_KEY) throw new Error("API_KEY environment variable not set.");
     try {
         const response = await ai.models.generateContent({
             model: 'gemini-2.5-flash',
             contents: `You are ContentManagerAI. Generate a professional weekly summary report based on the following platform analytics data. The report should be well-structured with sections for 'Top Artists', 'Genre Popularity', and 'Overall Engagement'. Use markdown for formatting. Data: ${JSON.stringify(analyticsData)}`
         });
+        // FIX: Access the generated text via the `.text` property on the response object.
         return response.text;
     } catch (error) {
         handleApiError(error, 'weekly report');
@@ -568,8 +545,6 @@ export const generateWeeklyReport = async (analyticsData: MockAnalytics): Promis
 };
 
 export const routeUserPromptToAgent = async (userPrompt: string): Promise<string> => {
-    if (!process.env.API_KEY) throw new Error("API_KEY environment variable not set.");
-
     const routerAgent = SPECIALIZED_AGENTS.find(a => a.id === 'agent-router');
     const agentsForRouting = SPECIALIZED_AGENTS.filter(a => a.id !== 'jason-executive' && a.id !== 'agent-router');
 
@@ -580,7 +555,6 @@ export const routeUserPromptToAgent = async (userPrompt: string): Promise<string
     const fullPrompt = `User Prompt: "${userPrompt}"\n\nAvailable Agents:\n${agentDescriptions}`;
 
     try {
-        // FIX: The call to generateContent was missing the required parameters object.
         const response = await ai.models.generateContent({
             model: "gemini-2.5-flash",
             contents: fullPrompt,
@@ -596,6 +570,7 @@ export const routeUserPromptToAgent = async (userPrompt: string): Promise<string
             }
         });
 
+        // FIX: Access the generated text via the `.text` property on the response object.
         const result = JSON.parse(response.text);
         if (result && result.agentId) {
             return result.agentId;
@@ -605,5 +580,29 @@ export const routeUserPromptToAgent = async (userPrompt: string): Promise<string
         console.error("Gemini API error in routeUserPromptToAgent:", error);
         // Fallback or re-throw
         throw new Error("Jason's routing matrix failed to delegate the task.");
+    }
+};
+
+export const generateTrackDescription = async (trackTitle: string, artist: Artist): Promise<string> => {
+    try {
+        const fullPrompt = `You are an expert music journalist for the S.M.T. Music Studio. Your task is to write a short, engaging, and SEO-friendly description (1-2 sentences) for a music track.
+
+        Track Title: "${trackTitle}"
+        Artist Name: "${artist.name}"
+        Artist Genre: "${artist.genre}"
+        Artist Personality: "${artist.personality}"
+
+        Based on this information, generate a compelling description that captures the essence of the track and would entice a new listener. Focus on mood, sound, and feeling. Do not use hashtags.`;
+
+        const response = await ai.models.generateContent({
+            model: "gemini-2.5-flash",
+            contents: fullPrompt,
+        });
+
+        // FIX: Access the generated text via the `.text` property on the response object.
+        return response.text.trim();
+    } catch (error) {
+        handleApiError(error, 'track description');
+        throw error;
     }
 };

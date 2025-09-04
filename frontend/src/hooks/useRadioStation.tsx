@@ -52,7 +52,7 @@ export const useRadioStation = () => {
             if (tracks.length > 0) {
                 const shuffledTracks = [...tracks].sort(() => Math.random() - 0.5);
                 // FIX: Replaced non-existent 'setCurrentTrack' with 'playPlaylist' to correctly start playback.
-                playPlaylist([shuffledTracks[0]]);
+                playPlaylist(shuffledTracks);
                 toast.success("Połączono z S.M.T. RADIO. Rozpoczynamy transmisję!");
             } else {
                 toast.error("W kosmosie panuje cisza. Żadnych utworów do odtworzenia.");

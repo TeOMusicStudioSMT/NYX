@@ -1,6 +1,8 @@
 
+
 import React, { createContext, useState, ReactNode, useEffect, useRef, useCallback } from 'react';
-import { User, SubscriptionTier, UserProject } from '../types';
+// FIX: Added UserPlaylist to imports
+import { User, SubscriptionTier, UserProject, UserPlaylist } from '../types';
 import { DAILY_POINT_ALLOWANCE } from '../constants';
 import toast from 'react-hot-toast';
 
@@ -16,7 +18,8 @@ interface AuthContextType {
   allUsers: User[];
   login: () => void;
   logout: () => void;
-  createUser: (newUser: Omit<User, 'projects' | 'memberSince' | 'avatarInitial'>) => boolean;
+  // FIX: Added 'playlists' to Omit type
+  createUser: (newUser: Omit<User, 'projects' | 'memberSince' | 'avatarInitial' | 'playlists'>) => boolean;
   updateUser: (updatedUser: User) => void;
   deleteUser: (email: string) => void;
   addUserProject: (project: UserProject) => void;
@@ -25,6 +28,10 @@ interface AuthContextType {
   adminLogout: () => void;
   changeAdminPassword: (current: string, newPass: string) => boolean;
   isGoogleReady: boolean;
+  // FIX: Added playlist management functions
+  createUserPlaylist: (title: string, description: string) => void;
+  deleteUserPlaylist: (playlistId: string) => void;
+  updateUserPlaylist: (playlistId: string, updates: Partial<UserPlaylist>) => void;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -46,10 +53,12 @@ const getInitialUsers = (): User[] => {
         const allProjects: Record<string, UserProject[]> = storedProjectsData ? JSON.parse(storedProjectsData) : {};
 
         if (storedUsersData) {
-            const users: Omit<User, 'projects'>[] = JSON.parse(storedUsersData);
-            return users.map(u => ({
+            const users: Omit<User, 'projects' | 'playlists'>[] = JSON.parse(storedUsersData);
+            return users.map((u: any) => ({
                 ...u,
                 projects: allProjects[u.email] || [],
+                // FIX: Hydrate playlists from localStorage
+                playlists: u.playlists || [],
             }));
         }
     } catch (error) {
@@ -153,7 +162,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
                     points: 100, // Starting points for new users
                     memberSince: new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' }),
                     lastLogin: '',
-                    projects: []
+                    projects: [],
+                    // FIX: Initialize playlists for new users
+                    playlists: [],
                 };
                 updatedAllUsers = [...currentAllUsers, newUser];
                 userToLogin = newUser;
@@ -195,7 +206,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     const checkGoogle = () => {
         if (window.google && window.google.accounts) {
-// FIX: Environment variables in Create React App must be prefixed with REACT_APP_.
              if (!process.env.REACT_APP_GOOGLE_CLIENT_ID) {
                 console.warn("REACT_APP_GOOGLE_CLIENT_ID environment variable not set. Google Sign-In will not work.");
                 toast.error("Google Sign-In is not configured by the administrator.", { duration: 6000 });
@@ -215,7 +225,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, [handleCredentialResponse]);
 
   const login = () => {
-// FIX: Environment variables in Create React App must be prefixed with REACT_APP_.
     if (!isGoogleReady || !process.env.REACT_APP_GOOGLE_CLIENT_ID) {
         toast.error("Google Sign-In is not configured or ready yet.");
         return;
@@ -232,7 +241,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     sessionStorage.removeItem('smt-id-token');
   };
   
-  const createUser = (newUser: Omit<User, 'projects' | 'memberSince' | 'avatarInitial'>): boolean => {
+  // FIX: Added 'playlists' to Omit type
+  const createUser = (newUser: Omit<User, 'projects' | 'memberSince' | 'avatarInitial' | 'playlists'>): boolean => {
       if (allUsers.some(u => u.email.toLowerCase() === newUser.email.toLowerCase())) {
           toast.error("An account with this email already exists.");
           return false;
@@ -243,6 +253,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           avatarInitial: newUser.name.charAt(0).toUpperCase(),
           memberSince: new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' }),
           projects: [],
+          // FIX: Initialize playlists for manually created users
+          playlists: [],
       };
       setAllUsers(prev => [...prev, userToAdd]);
       return true;
@@ -266,6 +278,37 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     };
     updateUser(updatedUser);
     toast.success(`'${project.title}' saved to My Projects!`);
+  };
+
+  // FIX: Added createUserPlaylist function
+  const createUserPlaylist = (title: string, description: string) => {
+    if (!user) {
+      toast.error("You must be logged in to create a playlist.");
+      return;
+    }
+    const newPlaylist: UserPlaylist = { id: `user_pl_${Date.now()}`, title, description, trackIds: [] };
+    const updatedUser = { ...user, playlists: [...(user.playlists || []), newPlaylist] };
+    updateUser(updatedUser);
+    toast.success(`Playlist "${title}" created!`);
+  };
+
+  // FIX: Added deleteUserPlaylist function
+  const deleteUserPlaylist = (playlistId: string) => {
+    if (!user) return;
+    const updatedPlaylists = (user.playlists || []).filter(p => p.id !== playlistId);
+    const updatedUser = { ...user, playlists: updatedPlaylists };
+    updateUser(updatedUser);
+    toast.success("Playlist deleted.");
+  };
+
+  // FIX: Added updateUserPlaylist function
+  const updateUserPlaylist = (playlistId: string, updates: Partial<UserPlaylist>) => {
+    if (!user) return;
+    const updatedPlaylists = (user.playlists || []).map(p =>
+      p.id === playlistId ? { ...p, ...updates } : p
+    );
+    const updatedUser = { ...user, playlists: updatedPlaylists };
+    updateUser(updatedUser);
   };
   
   const adminLogin = (password: string): boolean => {
@@ -292,7 +335,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ user, allUsers, login, logout, createUser, updateUser, deleteUser, addUserProject, isAdmin, adminLogin, adminLogout, changeAdminPassword, isGoogleReady }}>
+    // FIX: Added playlist functions to context provider value
+    <AuthContext.Provider value={{ user, allUsers, login, logout, createUser, updateUser, deleteUser, addUserProject, isAdmin, adminLogin, adminLogout, changeAdminPassword, isGoogleReady, createUserPlaylist, deleteUserPlaylist, updateUserPlaylist }}>
       {children}
     </AuthContext.Provider>
   );
