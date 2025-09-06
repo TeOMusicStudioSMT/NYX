@@ -87,6 +87,7 @@ const Header: React.FC = () => {
                 <button 
                     onClick={() => setMoreMenuOpen(!isMoreMenuOpen)}
                     className="group flex items-center space-x-2 px-4 py-2 rounded-lg text-brand-text-secondary hover:bg-liquid-abstract hover:text-white hover:bg-[length:200%_200%] hover:animate-nav-hover-gradient"
+                    data-testid="more-menu-button"
                 >
                     <span className="inline-block group-hover:animate-icon-jiggle"><MoreHorizontalIcon className="w-5 h-5"/></span>
                 </button>
